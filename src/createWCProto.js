@@ -1,5 +1,5 @@
 /**
- * @module API
+ * @module raf
  */
 /**
  * Created by tushar.mathur on 01/09/16.
@@ -7,7 +7,7 @@
 'use strict'
 
 import {createStore} from 'redux'
-import isCustomEvent from './isCustomEvent'
+import CustomEvent from './CustomEvent'
 
 function isArray (i) {
   return i instanceof Array
@@ -31,7 +31,7 @@ export default (patcher, component) => {
     __reducer (state, action) {
       const output = update(state, action)
       const [updatedState, event] = isArray(output) ? output : [output, null]
-      if (isCustomEvent(event)) this.dispatch(event)
+      if (CustomEvent.is(event)) this.dispatchEvent(event)
       return updatedState
     },
     __render () {

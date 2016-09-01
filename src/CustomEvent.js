@@ -6,7 +6,7 @@
 
 import root from 'window-or-global'
 
-export class CustomEvent {
+export default class CustomEvent {
   static of (...args) {
     if (root.CustomEvent) return new root.CustomEvent(...args)
     return new CustomEvent(...args)
@@ -15,7 +15,4 @@ export class CustomEvent {
   static is (event) {
     return event instanceof CustomEvent || root.CustomEvent
   }
-}
-export default function (event) {
-  return CustomEvent.is(event)
 }

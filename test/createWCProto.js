@@ -80,3 +80,17 @@ test.cb('dispatch', t => {
     }
   })
 })
+test('CustomEvent', t => {
+  const events = []
+  const mockPatcher = createMockPatcher()
+
+  function createShadowRoot () { return '@ROOT' }
+
+  const event = new rwc.CustomEvent()
+  const update = (state) => [state, event]
+  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({update}))
+  wc.createShadowRoot = createShadowRoot
+  wc.dispatchEvent = ev => events.push(ev)
+  wc.createdCallback()
+  t.deepEqual([event], events)
+})

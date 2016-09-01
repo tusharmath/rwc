@@ -147,22 +147,4 @@ update (state, {type, params}) {
 
 
 
-<a name="module_raf"></a>
-
-## raf
-<a name="module_raf..createWCProto"></a>
-
-### raf~createWCProto ⇒ <code>Object</code>
-Creates the prototype for the web component element.
-
-**Kind**: inner property of <code>[raf](#module_raf)</code>  
-**Returns**: <code>Object</code> - prototype object for creating HTMLElements  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| patcher | <code>function</code> | patches the virtual dom on [shadowRoot](https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot). |
-| component | <code>Object</code> |  |
-| component.init | <code>function</code> | returns the initial state of the component. |
-| component.update | <code>function</code> | a redux reducer for updating component state. |
-| component.view | <code>function</code> | takes in the state and returns a dom tree. |
-
+{{>main}}

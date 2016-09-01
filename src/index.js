@@ -5,5 +5,6 @@
 'use strict'
 
 import createWCProto from './createWCProto'
+import CustomEvent from './CustomEvent'
 
-export default {createWCProto}
+export default {createWCProto, CustomEvent}
