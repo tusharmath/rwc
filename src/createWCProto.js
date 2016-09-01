@@ -1,5 +1,5 @@
 /**
- * @module API
+ * @module raf
  */
 /**
  * Created by tushar.mathur on 01/09/16.

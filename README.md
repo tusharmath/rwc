@@ -55,15 +55,15 @@ const html = Object.create(HTMLElement.prototype)
 document.registerElement('x-counter', Object.assign(html, proto))
 ```
 
-<a name="module_API"></a>
+<a name="module_raf"></a>
 
-## API
-<a name="module_API..createWCProto"></a>
+## raf
+<a name="module_raf..createWCProto"></a>
 
-### API~createWCProto ⇒ <code>Object</code>
+### raf~createWCProto ⇒ <code>Object</code>
 Creates the prototype for the web component element.
 
-**Kind**: inner property of <code>[API](#module_API)</code>  
+**Kind**: inner property of <code>[raf](#module_raf)</code>  
 **Returns**: <code>Object</code> - prototype object for creating HTMLElements  
 
 | Param | Type | Description |
