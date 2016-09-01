@@ -3,3 +3,7 @@
  */
 
 'use strict'
+
+import registerWC from './registerWC'
+
+export default {registerWC}
