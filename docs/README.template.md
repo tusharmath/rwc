@@ -1,22 +1,19 @@
-# rwc
+# rwc (BETA)
 [![Build Status](https://travis-ci.org/tusharmath/rwc.svg?branch=master)](https://travis-ci.org/tusharmath/rwc)
 [![npm](https://img.shields.io/npm/v/rwc.svg)](https://www.npmjs.com/package/rwc)
 [![Coverage Status](https://coveralls.io/repos/github/tusharmath/rwc/badge.svg)](https://coveralls.io/github/tusharmath/rwc)
 
-RWC is a unique mix of [Shadow DOM] + [Virtual DOM] + [Redux] to create highly performant [web-components].
+RWC is a unique mix of [Shadow DOM] + [Virtual DOM] + [Redux] to create [web-components].
+This approach is tries to find a balance between a [scalable paradigm] and performance.
 
-[Shadow DOM]:     http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/
-[Virtual DOM]:    https://github.com/paldepind/snabbdom
-[Redux]:          redux.js.org
-[web-components]: http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/
-
-## Features
- - **Pure API:** A component is created using `init`, `update` & `view` which a pure functions, having no side-effects just like [ELM].
- - **Custom Events:** Supports dispatching of [CustomEvent] to communicate with the outside world.
- - **Virtual DOM:** Integrates with any virtual DOM implementation.
-   
-[ELM]:         elm-lang.org
-[CustomEvent]: https://developer.mozilla.org/en/docs/Web/API/CustomEvent
+[scalable paradigm]: http://staltz.com/why-react-redux-is-an-inferior-paradigm.html
+[Shadow DOM]:        http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/
+[Virtual DOM]:       https://github.com/paldepind/snabbdom
+[Redux]:             http://redux.js.org
+[web-components]:    http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/
+[reducer]:           http://redux.js.org/docs/basics/Reducers.html
+[ELM architecture]:  http://guide.elm-lang.org/architecture/
+[CustomEvent]:       https://developer.mozilla.org/en/docs/Web/API/CustomEvent
 
 
 ## Installation
@@ -25,28 +22,69 @@ RWC is a unique mix of [Shadow DOM] + [Virtual DOM] + [Redux] to create highly p
 npm install rwc --save
 ```
 
-## Usage
+## Features
+ - **Pure API:** A component is created using `init`, `update` & `view` all of which a pure functions,
+ having no side-effects similar to [ELM architecture].
+ - **Custom Events:** Supports dispatching of [CustomEvent] to communicate with the outside world.
+ - **Virtual DOM:** Integrates with any virtual DOM implementation.
+
+
+## Paradigm
+Components are composed of three functions —
+  - `init()` : Provides the initial state of the component.
+  - `update(state, action)`: A [reducer] function of [Redux] that takes an input `state` and based on the `action` returns a new state.
+     Additionally the update function can return a tuple (an array) of two elements containing both the `state` and an object of [CustomEvent] type, which is dispatched automatically as an component's event.
+  - `view(state, dispatch)`: The view function converts the `state` into a virtual DOM tree.
+     Additionally it also gets a `dispatch()` function which can dispatch `actions` on DOM events.
+
+All these three functions are essentially pure functions, ie. they have no side effects and should remain referentially transparent for all practical purposes.
+
+## Create Component
+
+```js
+/* CounterComponent.js */
+
+import h from 'snabbdom/h'
+
+export const init = () => {
+  return {count: 0}
+}
+
+export const update = (state, {type, params}) => {
+  switch (type) {
+    case 'INC': return {count: state.count + 1}
+    case 'DEC': return {count: state.count - 1}
+    default: return state
+  }
+}
+
+export const view = ({count}, dispatch) => {
+  return h('div', [
+    h('h1', [count]),
+    h('button', {on: {click: dispatch('INC')}}, ['Increment']),
+    h('button', {on: {click: dispatch('DEC')}}, ['Decrement'])
+  ])
+}
+```
+
+## Register Web Component
 
 ```js
 import rwc from 'rwc'
 import snabbdom from 'snabbdom'
-import h from 'snabbdom/h'
+import * as CounterComponent from './CounterComponent'
+const patch = snabbdom.init([
+  require('snabbdom/modules/eventlisteners')
+])
 
-// check examples to see what a patcher is
-import snabbdomPatcher from './snabbdom-patcher'
-
-
-const component = {
-                    
-  init () { /* return an intial state */},
-  
-  update (state, action) { /* return a new state */ },
-  
-  view (state, dispatchAction) { /* return the virtual dom tree */ }
-                  
+// Patcher function
+function snabbdomPatcher (shadowRoot) {
+  let __vNode = shadowRoot.appendChild(document.createElement('div'))
+  return function (vNode) { __vNode = patch(__vNode, vNode) }
 }
 
-const proto = rwc.createWCProto(snabbdomPatcher, component)
+// create proto object
+const proto = rwc.createWCProto(snabbdomPatcher, CounterComponent)
 
 // create an HTML element
 const html = Object.create(HTMLElement.prototype)
