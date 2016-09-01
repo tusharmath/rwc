@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/tusharmath/rwc/badge.svg)](https://coveralls.io/github/tusharmath/rwc)
 
 RWC is a unique mix of [Shadow DOM] + [Virtual DOM] + [Redux] to create [web-components].
-This approach is tries to find a balance between a [scalable paradigm] and performance.
+This approach is an attempt to find a balance between a [scalable paradigm] and performance.
 
 [scalable paradigm]: http://staltz.com/why-react-redux-is-an-inferior-paradigm.html
 [Shadow DOM]:        http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/
@@ -16,6 +16,7 @@ This approach is tries to find a balance between a [scalable paradigm] and perfo
 [CustomEvent]:       https://developer.mozilla.org/en/docs/Web/API/CustomEvent
 [snabbdom]:          https://github.com/paldepind/snabbdom
 [ShadowRoot]:        https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot
+[actions]:           http://redux.js.org/docs/basics/Actions.html
 
 ## Installation
 
@@ -23,35 +24,28 @@ This approach is tries to find a balance between a [scalable paradigm] and perfo
 npm install rwc --save
 ```
 
-## Features
- - **Pure API:** A component is created using `init`, `update` & `view` all of which a pure functions,
- having no side-effects similar to [ELM architecture].
- - **Custom Events:** Supports dispatching of [CustomEvent] to communicate with the outside world.
- - **Virtual DOM:** Integrates with any virtual DOM implementation.
-
-
 ## Paradigm
 Components are composed of three functions —
   - `init()` : Provides the initial state of the component.
-  - `update(state, action)`: A [reducer] function of [Redux] that takes an input `state` and based on the `action` returns a new state.
-     Additionally the update function can return a tuple (an array) of two elements containing both the `state` and an object of [CustomEvent] type, which is dispatched automatically as an component's event.
-  - `view(state, dispatch)`: The view function converts the `state` into a virtual DOM tree.
-     Additionally it also gets a `dispatch()` function which can dispatch `actions` on DOM events.
+  - `update(state, action)`: A [reducer] function like that in [Redux] that takes an input `state` and based on the `action` returns a new output state. Additionally it can return a tuple (an array) of two elements containing both the `state` and an object of [CustomEvent] type, which is dispatched as a DOM event.
+  - `view(state, dispatch)`: The view function converts the `state` into a virtual DOM tree. Additionally it also gets a `dispatch()` function which can dispatch [actions] on DOM events.
 
 All these three functions are essentially pure functions, ie. they have no side effects and should remain referentially transparent for all practical purposes.
 
 ## Create Component
 
 ```js
-/* CounterComponent.js */
+// CounterComponent.js
 
 import h from 'snabbdom/h'
 
-export const init = () => {
+// Creates an initial state
+const init = () => {
   return {count: 0}
 }
 
-export const update = (state, {type, params}) => {
+// Reducer function for redux
+const update = (state, {type, params}) => {
   switch (type) {
     case 'INC': return {count: state.count + 1}
     case 'DEC': return {count: state.count - 1}
@@ -59,13 +53,16 @@ export const update = (state, {type, params}) => {
   }
 }
 
-export const view = ({count}, dispatch) => {
+// Creates virtual DOM elements
+const view = ({count}, dispatch) => {
   return h('div', [
     h('h1', [count]),
     h('button', {on: {click: dispatch('INC')}}, ['Increment']),
     h('button', {on: {click: dispatch('DEC')}}, ['Decrement'])
   ])
 }
+
+export default {init, view, update}
 ```
 
 ## Register Web Component
@@ -73,24 +70,36 @@ export const view = ({count}, dispatch) => {
 ```js
 import rwc from 'rwc'
 import snabbdom from 'snabbdom'
-import * as CounterComponent from './CounterComponent'
+import CounterComponent from './CounterComponent'
 
-// Patcher function
+// Patcher function (for snabbdom only)
 function snabbdomPatcher (shadowRoot) {
   const patch = snabbdom.init()
+
+  // setup shadowroot element
   let __vNode = shadowRoot.appendChild(document.createElement('div'))
-  return function (vNode) { __vNode = patch(__vNode, vNode) }
+
+  // returned function is called with the latest virtual DOM
+  return function (vNode) {
+    __vNode = patch(__vNode, vNode)
+  }
 }
 
-// create proto object
+// create prototype object
 const proto = rwc.createWCProto(snabbdomPatcher, CounterComponent)
 
-// create an HTML element
+// create an HTMLElement instance
 const html = Object.create(HTMLElement.prototype)
 
-// extend the HTML element and register as usual
-document.registerElement('x-counter', Object.assign(html, proto))
+// extend html element with the created prototype
+const CounterHTMLComponent = Object.assign(html, proto)
+
+// register as usual
+document.registerElement('x-counter', CounterHTMLComponent)
 ```
+
+## Virtual DOM Patcher
+The `patcher` function gives the to ability to customize how the shadow DOM is updated. The function takes in an element of [ShadowRoot] type and returns another function that is called whenever a new virtual DOM tree is created.
 
 ## Dispatching Custom Events
 For components to communicate with the outside world the component can dispatch a [CustomEvent] via the `update()` function.
@@ -119,7 +128,23 @@ export const update = (state, {type, params}) => {
 }
 ```
 
-## Virtual DOM Patcher
-The `patcher` function gives to ability to customize how the shadow DOM is updated. The function takes in an element of [ShadowRoot] type and returns another function that is called with the Virtual DOM tree node everytime that updates.
+## Listening to attribute changes
+Attribute changes are fired as [actions] and are namspaced with `@@attr`. For example —
+```html
+<x-counter some-custom-attribute="100" />
+```
+The changes can be observed inside the update function using `@@attr/some-custom-attribute` —
+```js
+update (state, {type, params}) {
+  switch (type) {
+    case '@@attr/some-custom-attribute':
+      return {count: state.count + parseInt(params)}
+    case default: return state
+  }
+}
+```
+
+
+
 
 {{>main}}
