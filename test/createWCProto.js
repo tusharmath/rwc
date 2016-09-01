@@ -7,7 +7,20 @@
 import rwc from '../src'
 import test from 'ava'
 
-function mockComponent () {
+function createMockPatcher () {
+  const output = {
+    views: [],
+    root: null,
+    patcher: function (root) {
+      output.root = root
+      return function (view) {
+        output.views.push(view)
+      }
+    }
+  }
+  return output
+}
+function createMockComponent () {
   return {
     init () {
       return {count: 0}
@@ -29,12 +42,14 @@ function mockComponent () {
 }
 
 test('is function ', t => t.is(typeof rwc.createWCProto, 'function'))
-test(() => {
-  const mockPatcher = root => view => null
+test('patcher', t => {
+  const mockPatcher = createMockPatcher()
 
   function createShadowRoot () { return '@ROOT' }
 
-  const wc = rwc.createWCProto(mockPatcher, mockComponent())
+  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent())
   wc.createShadowRoot = createShadowRoot
   wc.createdCallback()
+  t.is(mockPatcher.root, '@ROOT')
+  t.deepEqual(mockPatcher.views, ['<div>0</div>'])
 })
