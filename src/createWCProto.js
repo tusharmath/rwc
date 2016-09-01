@@ -9,6 +9,9 @@
 import {createStore} from 'redux'
 import isCustomEvent from './isCustomEvent'
 
+function isArray (i) {
+  return i instanceof Array
+}
 /**
  * Creates the prototype for the web component element.
  * @name createWCProto
@@ -27,7 +30,7 @@ export default (patcher, params) => {
     },
     __reducer (state, action) {
       const output = update(state, action)
-      const [updatedState, event] = output instanceof Array ? output : [output, null]
+      const [updatedState, event] = isArray(output) ? output : [output, null]
       if (isCustomEvent(event)) this.dispatch(event)
       return updatedState
     },
