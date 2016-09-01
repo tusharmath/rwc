@@ -5,9 +5,9 @@
 'use strict'
 
 import registerElement from './registerElement'
-import createProto from './createProto'
+import createWC from './createWC'
 
 export default function registerWC (name, params) {
-  const prototype = createProto(params)
+  const prototype = createWC(params)
   registerElement(name, {prototype})
 }

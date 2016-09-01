@@ -7,7 +7,7 @@
 
 import createStore from 'redux/src/createStore'
 
-export default ({update, view, init, patcher}) => ({
+export default (patcher, {update, view, init}) => ({
   __dispatchActions (type) {
     return (params) => this.__store.dispatch({type, params})
   },
