@@ -5,8 +5,9 @@
  * Created by tushar.mathur on 01/09/16.
  */
 'use strict'
-/* global CustomEvent */
+
 import {createStore} from 'redux'
+import isCustomEvent from './isCustomEvent'
 
 /**
  * Creates the prototype for the web component element.
@@ -27,13 +28,13 @@ export default (patcher, params) => {
     __reducer (state, action) {
       const output = update(state, action)
       const [updatedState, event] = output instanceof Array ? output : [output, null]
-      if (event instanceof CustomEvent) this.dispatch(event)
+      if (isCustomEvent(event)) this.dispatch(event)
       return updatedState
     },
     __render () {
       this.__patch(view(
         this.__store.getState(),
-        this.__dispatchAction.bind(this)
+        this.__dispatchActions.bind(this)
       ))
     },
     attributeChangedCallback (name, old, params) {
