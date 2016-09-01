@@ -35,29 +35,23 @@ import h from 'snabbdom/h'
 // check examples to see what a patcher is
 import snabbdomPatcher from './snabbdom-patcher'
 
-const proto = rwc.createWCProto(snabbdomPatcher, {
-  init () {
-    return {count: 0}
-  },
-  update (state, {type, param}) {
-    switch (type) {
-      case 'INCREMENT': return {count: state.count + 1}
-      case 'DECREMENT': return {count: state.count - 1}
-      default: return state
-    }
-  },
-  view ({count}, dispatch) {
-    return (
-      h('div', [
-        h('h1', [count]),
-        h('button', {on: {click: dispatch('INCREMENT')}}, ['INCREMENT']),
-        h('button', {on: {click: dispatch('DECREMENT')}}, ['DECREMENT'])
-      ])
-    )
-  }
-})
 
+const component = {
+                    
+  init () { /* return an intial state */},
+  
+  update (state, action) { /* return a new state */ },
+  
+  view (state, dispatchAction) { /* return the virtual dom tree */ }
+                  
+}
+
+const proto = rwc.createWCProto(snabbdomPatcher, component)
+
+// create an HTML element
 const html = Object.create(HTMLElement.prototype)
+
+// extend the HTML element and register as usual
 document.registerElement('x-counter', Object.assign(html, proto))
 ```
 
