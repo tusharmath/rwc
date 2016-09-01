@@ -69,20 +69,10 @@ export default {init, view, update}
 
 ```js
 import rwc from 'rwc'
-import snabbdom from 'snabbdom'
 import CounterComponent from './CounterComponent'
 
-// Patcher function (for snabbdom only)
 function virtualDOMPatcher (shadowRoot) {
-  const patch = snabbdom.init()
-
-  // setup shadowroot element
-  let __vNode = shadowRoot.appendChild(document.createElement('div'))
-
-  // returned function is called with the latest virtual DOM
-  return function (vNode) {
-    __vNode = patch(__vNode, vNode)
-  }
+  return (vnode) => /* patches the shadowRoot with vNode */
 }
 
 // create prototype object
@@ -102,7 +92,7 @@ document.registerElement('x-counter', CounterHTMLComponent)
 The `virtualDOMPatcher` function argument gives the to ability to customize how the shadow DOM is updated.
 
 #### Examples:
-1. [snabbdom](https://esnextb.in/?gist=ba33f1903a3eefec86642afd34baf2b4)
+1. [view snabbdom demo](https://esnextb.in/?gist=ba33f1903a3eefec86642afd34baf2b4)
 
 ```js
 import snabbdom from 'snabbdom'
@@ -116,7 +106,7 @@ function virtualDOMPatcher (shadowRoot) {
 }
 ```
 
-2. [preact](https://esnextb.in/?gist=a5d9ddb7805a741c042516d170c0a150)
+2. [view preact demo](https://esnextb.in/?gist=a5d9ddb7805a741c042516d170c0a150)
 
 ```js
 import { render } from 'preact'
