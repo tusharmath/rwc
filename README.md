@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/rwc.svg)](https://www.npmjs.com/package/rwc)
 [![Coverage Status](https://coveralls.io/repos/github/tusharmath/rwc/badge.svg)](https://coveralls.io/github/tusharmath/rwc)
 
-RWC is a unique mix of [Shadow DOM] + [Virtual DOM] + [Redux] to create highly performance [web-components].
+RWC is a unique mix of [Shadow DOM] + [Virtual DOM] + [Redux] to create highly performant [web-components].
 
 [Shadow DOM]:     http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/
 [Virtual DOM]:    https://github.com/paldepind/snabbdom
@@ -11,10 +11,9 @@ RWC is a unique mix of [Shadow DOM] + [Virtual DOM] + [Redux] to create highly p
 [web-components]: http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/
 
 ## Features
- - **Performance:** Each web-component gets it's own unique instance of virtual dom. This makes vDOM diffs a lot more optimized.
- - **Pure API:** A component is composed of `init`, `update` & `view` which a pure functions, having no side-effects just like [ELM].
+ - **Pure API:** A component is created using `init`, `update` & `view` which a pure functions, having no side-effects just like [ELM].
  - **Custom Events:** Supports dispatching of [CustomEvent] to communicate with the outside world.
- - **Virtual DOM:** Integrates with any virtual dom implementation.
+ - **Virtual DOM:** Integrates with any virtual DOM implementation.
    
 [ELM]:         elm-lang.org
 [CustomEvent]: https://developer.mozilla.org/en/docs/Web/API/CustomEvent
@@ -25,7 +24,9 @@ RWC is a unique mix of [Shadow DOM] + [Virtual DOM] + [Redux] to create highly p
 import rwc from 'rwc'
 import snabbdom from 'snabbdom'
 import h from 'snabbdom/h'
-import snabbdomPatcher from './snabbdom-patcher' // check examples to see implemenation
+
+// check examples to see what a patcher is
+import snabbdomPatcher from './snabbdom-patcher'
 
 const proto = rwc.createWCProto(snabbdomPatcher, {
   init () {
@@ -60,22 +61,23 @@ document.registerElement('x-counter', Object.assign(html, proto))
 npm install rwc --save
 ```
 
+## API
+<a name="module_rwc"></a>
 
-<a name="module_raf"></a>
+## rwc
+<a name="module_rwc..createWCProto"></a>
 
-## raf
-<a name="exp_module_raf--module.exports"></a>
-
-### module.exports(patcher, params) ⏏
+### rwc~createWCProto ⇒ <code>Object</code>
 Creates the prototype for the web component element.
 
-**Kind**: Exported function  
+**Kind**: inner property of <code>[rwc](#module_rwc)</code>  
+**Returns**: <code>Object</code> - prototype object for creating HTMLElements  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| patcher | <code>function</code> | A function that takes in a [shadowRoot](https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot) element and returns another function which is called every time with the updated virtual dom tree. |
-| params | <code>Object</code> | constructor params |
-| params.update | <code>function</code> | This a redux reducer, which takes in the current state and an action and returns a new one. If the function returns an array with the second element as an instance of [CustomEvent], then it would automatically be dispatched as an event. |
-| params.view | <code>function</code> | Takes in the current state and return a new virtual dom node. |
-| params.init | <code>function</code> | Returns the initial state of the component |
+| patcher | <code>function</code> | patches the virtual dom on [shadowRoot](https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot). |
+| params | <code>Object</code> | component constructor params. |
+| params.update | <code>function</code> | a redux reducer for updating component state. |
+| params.view | <code>function</code> | takes in the state and returns a dom tree. |
+| params.init | <code>function</code> | returns the initial state of the component. |
 
