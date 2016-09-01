@@ -6,7 +6,7 @@
  */
 'use strict'
 /* global CustomEvent */
-import createStore from 'redux/src/createStore'
+import {createStore} from 'redux'
 
 /**
  * Creates the prototype for the web component element.
