@@ -13,6 +13,8 @@ export default class CustomEvent {
   }
 
   static is (event) {
-    return event instanceof CustomEvent || root.CustomEvent
+    return event instanceof CustomEvent || (
+        root.CustomEvent && event instanceof root.CustomEvent
+      )
   }
 }
