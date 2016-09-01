@@ -3,3 +3,7 @@
  */
 
 'use strict'
+
+import createWCProto from './createWCProto'
+
+export default {createWCProto}
