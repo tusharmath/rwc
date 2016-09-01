@@ -18,6 +18,13 @@ RWC is a unique mix of [Shadow DOM] + [Virtual DOM] + [Redux] to create highly p
 [ELM]:         elm-lang.org
 [CustomEvent]: https://developer.mozilla.org/en/docs/Web/API/CustomEvent
 
+
+## Installation
+
+```bash
+npm install rwc --save
+```
+
 ## Usage
 
 ```js
@@ -54,23 +61,15 @@ const html = Object.create(HTMLElement.prototype)
 document.registerElement('x-counter', Object.assign(html, proto))
 ```
 
-
-## Installation
-
-```bash
-npm install rwc --save
-```
+<a name="module_API"></a>
 
 ## API
-<a name="module_rwc"></a>
+<a name="module_API..createWCProto"></a>
 
-## rwc
-<a name="module_rwc..createWCProto"></a>
-
-### rwc~createWCProto ⇒ <code>Object</code>
+### API~createWCProto ⇒ <code>Object</code>
 Creates the prototype for the web component element.
 
-**Kind**: inner property of <code>[rwc](#module_rwc)</code>  
+**Kind**: inner property of <code>[API](#module_API)</code>  
 **Returns**: <code>Object</code> - prototype object for creating HTMLElements  
 
 | Param | Type | Description |
