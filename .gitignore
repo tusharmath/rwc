@@ -1,0 +1,11 @@
+coverage
+__*
+*.diff
+node_modules/
+*.sublime-*
+.idea
+*.dmg
+*.log
+.nyc*
+.dist/
+.vscode/
