@@ -14,7 +14,8 @@ This approach is tries to find a balance between a [scalable paradigm] and perfo
 [reducer]:           http://redux.js.org/docs/basics/Reducers.html
 [ELM architecture]:  http://guide.elm-lang.org/architecture/
 [CustomEvent]:       https://developer.mozilla.org/en/docs/Web/API/CustomEvent
-
+[snabbdom]:          https://github.com/paldepind/snabbdom
+[ShadowRoot]:        https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot
 
 ## Installation
 
@@ -73,12 +74,10 @@ export const view = ({count}, dispatch) => {
 import rwc from 'rwc'
 import snabbdom from 'snabbdom'
 import * as CounterComponent from './CounterComponent'
-const patch = snabbdom.init([
-  require('snabbdom/modules/eventlisteners')
-])
 
 // Patcher function
 function snabbdomPatcher (shadowRoot) {
+  const patch = snabbdom.init()
   let __vNode = shadowRoot.appendChild(document.createElement('div'))
   return function (vNode) { __vNode = patch(__vNode, vNode) }
 }
@@ -92,5 +91,35 @@ const html = Object.create(HTMLElement.prototype)
 // extend the HTML element and register as usual
 document.registerElement('x-counter', Object.assign(html, proto))
 ```
+
+## Dispatching Custom Events
+For components to communicate with the outside world the component can dispatch a [CustomEvent] via the `update()` function.
+
+```js
+export const update = (state, {type, params}) => {
+  switch (type) {
+
+    case 'INC':
+      {count: state.count + 1},
+      return [
+        {count: state.count + 1},
+        new CustomEvent('changed', {detail: _state.count})
+      ]
+
+    case 'DEC':
+      const _state = {count: state.count - 1}
+      return [
+        _state,
+        new CustomEvent('changed', {detail: _state.count})
+      ]
+
+    default: return state
+
+  }
+}
+```
+
+## Virtual DOM Patcher
+The `patcher` function gives to ability to customize how the shadow DOM is updated. The function takes in an element of [ShadowRoot] type and returns another function that is called with the Virtual DOM tree node everytime that updates.
 
 {{>main}}
