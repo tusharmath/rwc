@@ -15,14 +15,14 @@ function isArray (i) {
 /**
  * Creates the prototype for the web component element.
  * @name createWCProto
- * @param {Function} patcher - patches the virtual dom on [shadowRoot]{@link https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot}.
+ * @param {Function} virtualDOMPatcher - patches the virtual dom on [shadowRoot]{@link https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot}.
  * @param {Object} component
  * @param {Function} component.init - returns the initial state of the component.
  * @param {Function} component.update - a redux reducer for updating component state.
  * @param {Function} component.view - takes in the state and returns a dom tree.
  * @return {Object} prototype object for creating HTMLElements
  */
-export default (patcher, component) => {
+export default (virtualDOMPatcher, component) => {
   const {update, view, init} = component
   return ({
     __dispatchActions (type) {
@@ -44,7 +44,7 @@ export default (patcher, component) => {
       this.__store.dispatch({type: `@@attr/${name}`, params})
     },
     createdCallback () {
-      this.__patch = patcher(this.createShadowRoot())
+      this.__patch = virtualDOMPatcher(this.createShadowRoot())
       this.__store = createStore(this.__reducer.bind(this), init())
       this.__render()
       this.__dispose = this.__store.subscribe(() => this.__render())

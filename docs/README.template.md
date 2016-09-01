@@ -17,7 +17,7 @@ This approach is an attempt to find a balance between a [scalable paradigm] and 
 [snabbdom]:          https://github.com/paldepind/snabbdom
 [ShadowRoot]:        https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot
 [actions]:           http://redux.js.org/docs/basics/Actions.html
-
+[preact]:            https://github.com/developit/preact
 ## Installation
 
 ```bash
@@ -73,7 +73,7 @@ import snabbdom from 'snabbdom'
 import CounterComponent from './CounterComponent'
 
 // Patcher function (for snabbdom only)
-function snabbdomPatcher (shadowRoot) {
+function virtualDOMPatcher (shadowRoot) {
   const patch = snabbdom.init()
 
   // setup shadowroot element
@@ -86,7 +86,7 @@ function snabbdomPatcher (shadowRoot) {
 }
 
 // create prototype object
-const proto = rwc.createWCProto(snabbdomPatcher, CounterComponent)
+const proto = rwc.createWCProto(virtualDOMPatcher, CounterComponent)
 
 // create an HTMLElement instance
 const html = Object.create(HTMLElement.prototype)
@@ -99,7 +99,36 @@ document.registerElement('x-counter', CounterHTMLComponent)
 ```
 
 ## Virtual DOM Patcher
-The `patcher` function gives the to ability to customize how the shadow DOM is updated. The function takes in an element of [ShadowRoot] type and returns another function that is called whenever a new virtual DOM tree is created.
+The `virtualDOMPatcher` function argument gives the to ability to customize how the shadow DOM is updated.
+
+#### Examples:
+1. [snabbdom](https://esnextb.in/?gist=ba33f1903a3eefec86642afd34baf2b4)
+
+```js
+import snabbdom from 'snabbdom'
+
+function virtualDOMPatcher (shadowRoot) {
+  const patch = snabbdom.init()
+  let __vNode = shadowRoot.appendChild(document.createElement('div'))
+  return function (vNode) {
+    __vNode = patch(__vNode, vNode)
+  }
+}
+```
+
+2. [preact](https://esnextb.in/?gist=a5d9ddb7805a741c042516d170c0a150)
+
+```js
+import { render } from 'preact'
+import { createElement as h } from 'preact-hyperscript'
+
+function virtualDOMPatcher (shadowRoot) {
+  let __vNode = render(h('div'), shadowRoot)
+  return function (vNode) {
+    render(vNode, shadowRoot, __vNode)
+  }
+}
+```
 
 ## Dispatching Custom Events
 For components to communicate with the outside world the component can dispatch a [CustomEvent] via the `update()` function.
