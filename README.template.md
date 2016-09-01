@@ -19,6 +19,41 @@ RWC is a unique mix of [Shadow DOM] + [Virtual DOM] + [Redux] to create highly p
 [ELM]:         elm-lang.org
 [CustomEvent]: https://developer.mozilla.org/en/docs/Web/API/CustomEvent
 
+## Usage
+
+```js
+import rwc from 'rwc'
+import snabbdom from 'snabbdom'
+import h from 'snabbdom/h'
+import snabbdomPatcher from './snabbdom-patcher' // check examples to see implemenation
+
+const proto = rwc.createWCProto(snabbdomPatcher, {
+  init () {
+    return {count: 0}
+  },
+  update (state, {type, param}) {
+    switch (type) {
+      case 'INCREMENT': return {count: state.count + 1}
+      case 'DECREMENT': return {count: state.count - 1}
+      default: return state
+    }
+  },
+  view ({count}, dispatch) {
+    return (
+      h('div', [
+        h('h1', [count]),
+        h('button', {on: {click: dispatch('INCREMENT')}}, ['INCREMENT']),
+        h('button', {on: {click: dispatch('DECREMENT')}}, ['DECREMENT'])
+      ])
+    )
+  }
+})
+
+const html = Object.create(HTMLElement.prototype)
+document.registerElement('x-counter', Object.assign(html, proto))
+```
+
+
 ## Installation
 
 ```bash

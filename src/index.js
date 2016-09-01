@@ -4,6 +4,6 @@
 
 'use strict'
 
-import registerWC from './registerWC'
+import createWCProto from './createWCProto'
 
-export default {registerWC}
+export default {createWCProto}
