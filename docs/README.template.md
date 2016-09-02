@@ -113,9 +113,9 @@ The `virtualDOMPatcher` function argument gives the to ability to customize how 
   import { createElement as h } from 'preact-hyperscript'
 
   function virtualDOMPatcher (shadowRoot) {
-    let __vNode = render(h('div'), shadowRoot)
+    let __vNode
     return function (vNode) {
-      render(vNode, shadowRoot, __vNode)
+      __vNode =render(vNode, shadowRoot, __vNode)
     }
   }
   ```
