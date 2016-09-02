@@ -41,18 +41,20 @@ export default (virtualDOMPatcher, component) => {
     __render () {
       this.__patch(view(
         this.__store.getState(),
-        this.__dispatchActions.bind(this)
+        this.__dispatchActions
       ))
     },
     attributeChangedCallback (name, old, params) {
       this.__store.dispatch({type: `@@attr/${name}`, params})
     },
     createdCallback () {
+      this.__handlers = {}
+      this.__dispatchActions = this.__dispatchActions.bind(this)
+
       this.__patch = virtualDOMPatcher(this.createShadowRoot())
       this.__store = createStore(this.__reducer.bind(this), init(this))
       this.__render()
       this.__dispose = this.__store.subscribe(() => this.__render())
-      this.__handlers = {}
     },
     detachedCallback () {
       this.__dispose()
