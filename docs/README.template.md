@@ -120,6 +120,25 @@ The `virtualDOMPatcher` function argument gives the to ability to customize how 
   }
   ```
 
+3. [view maquette demo](https://esnextb.in/?gist=3d01659f63f914882340e4173d5d273d)
+
+  ```js
+  import {h, createProjector} from 'maquette'
+
+  function virtualDOMPatcher (root) {
+    let __vNode
+    const projector = createProjector()
+    const render = () => projector.append(root, () => __vNode)
+    return function (vNode) {
+      if(!__vNode) {
+        __vNode = vNode
+        render()
+      }
+      __vNode = vNode
+    }
+  }
+  ```
+
 ## Dispatching Custom Events
 For components to communicate with the outside world the component can dispatch a [CustomEvent] via the `update()` function.
 
