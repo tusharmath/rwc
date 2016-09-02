@@ -26,7 +26,7 @@ npm install rwc --save
 
 ## Paradigm
 Components are composed of three functions —
-  - `init()` : Provides the initial state of the component.
+  - `init(component)` : The function takes in the current instance of the component and returns the initial state.
   - `update(state, action)`: A [reducer] function like that in [Redux] that takes an input `state` and based on the `action` returns a new output state. Additionally it can return a tuple (an array) of two elements containing both the `state` and an object of [CustomEvent] type, which is dispatched as a DOM event.
   - `view(state, dispatch)`: The view function converts the `state` into a virtual DOM tree. Additionally it also gets a `dispatch()` function which can dispatch [actions] on DOM events.
 
