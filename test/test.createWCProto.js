@@ -124,7 +124,7 @@ test('memoize handler', t => {
   const createShadowRoot = () => '@ROOT'
   const view = ({count}, _dispatch) => {
     dispatch = _dispatch
-    return '<div>${count}</div>'
+    return `<div>${count}</div>`
   }
   const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({view}))
   wc.createShadowRoot = createShadowRoot
