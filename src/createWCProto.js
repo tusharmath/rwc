@@ -24,9 +24,13 @@ function isArray (i) {
  */
 export default (virtualDOMPatcher, component) => {
   const {update, view, init} = component
-  return ({
+  return {
     __dispatchActions (type) {
-      return (params) => this.__store.dispatch({type, params})
+      if (!this.__handlers[type]) {
+        this.__handlers[type] = (params) =>
+          this.__store.dispatch({type, params})
+      }
+      return this.__handlers[type]
     },
     __reducer (state, action) {
       const output = update(state, action)
@@ -48,9 +52,10 @@ export default (virtualDOMPatcher, component) => {
       this.__store = createStore(this.__reducer.bind(this), init(this))
       this.__render()
       this.__dispose = this.__store.subscribe(() => this.__render())
+      this.__handlers = {}
     },
     detachedCallback () {
       this.__dispose()
     }
-  })
+  }
 }

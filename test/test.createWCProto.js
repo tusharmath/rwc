@@ -118,3 +118,16 @@ test('init()', t => {
   wc.createdCallback()
   t.true(init.calledWith(wc))
 })
+test('memoize handler', t => {
+  let dispatch = null
+  const mockPatcher = createMockPatcher()
+  const createShadowRoot = () => '@ROOT'
+  const view = ({count}, _dispatch) => {
+    dispatch = _dispatch
+    return '<div>${count}</div>'
+  }
+  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({view}))
+  wc.createShadowRoot = createShadowRoot
+  wc.createdCallback()
+  t.is(dispatch('XYZ'), dispatch('XYZ'))
+})
