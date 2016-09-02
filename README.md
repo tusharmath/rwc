@@ -94,31 +94,31 @@ The `virtualDOMPatcher` function argument gives the to ability to customize how 
 #### Examples:
 1. [view snabbdom demo](https://esnextb.in/?gist=ba33f1903a3eefec86642afd34baf2b4)
 
-```js
-import snabbdom from 'snabbdom'
+  ```js
+  import snabbdom from 'snabbdom'
 
-function virtualDOMPatcher (shadowRoot) {
-  const patch = snabbdom.init()
-  let __vNode = shadowRoot.appendChild(document.createElement('div'))
-  return function (vNode) {
-    __vNode = patch(__vNode, vNode)
+  function virtualDOMPatcher (shadowRoot) {
+    const patch = snabbdom.init()
+    let __vNode = shadowRoot.appendChild(document.createElement('div'))
+    return function (vNode) {
+      __vNode = patch(__vNode, vNode)
+    }
   }
-}
-```
+  ```
 
 2. [view preact demo](https://esnextb.in/?gist=a5d9ddb7805a741c042516d170c0a150)
 
-```js
-import { render } from 'preact'
-import { createElement as h } from 'preact-hyperscript'
+  ```js
+  import { render } from 'preact'
+  import { createElement as h } from 'preact-hyperscript'
 
-function virtualDOMPatcher (shadowRoot) {
-  let __vNode = render(h('div'), shadowRoot)
-  return function (vNode) {
-    render(vNode, shadowRoot, __vNode)
+  function virtualDOMPatcher (shadowRoot) {
+    let __vNode = render(h('div'), shadowRoot)
+    return function (vNode) {
+      render(vNode, shadowRoot, __vNode)
+    }
   }
-}
-```
+  ```
 
 ## Dispatching Custom Events
 For components to communicate with the outside world the component can dispatch a [CustomEvent] via the `update()` function.
