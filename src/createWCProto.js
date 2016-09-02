@@ -45,7 +45,7 @@ export default (virtualDOMPatcher, component) => {
     },
     createdCallback () {
       this.__patch = virtualDOMPatcher(this.createShadowRoot())
-      this.__store = createStore(this.__reducer.bind(this), init())
+      this.__store = createStore(this.__reducer.bind(this), init(this))
       this.__render()
       this.__dispose = this.__store.subscribe(() => this.__render())
     },
