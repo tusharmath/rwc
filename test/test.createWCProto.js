@@ -6,6 +6,7 @@
 
 import rwc from '../src'
 import test from 'ava'
+import {spy} from 'sinon'
 
 function createMockPatcher () {
   const output = {
@@ -107,4 +108,13 @@ test('invalid CustomEvent', t => {
   wc.dispatchEvent = ev => events.push(ev)
   wc.createdCallback()
   t.deepEqual(events, [])
+})
+test('init()', t => {
+  const mockPatcher = createMockPatcher()
+  const createShadowRoot = () => '@ROOT'
+  const init = spy(x => ({count: 0}))
+  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({init}))
+  wc.createShadowRoot = createShadowRoot
+  wc.createdCallback()
+  t.true(init.calledWith(wc))
 })
