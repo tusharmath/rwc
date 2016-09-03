@@ -46,10 +46,10 @@ test('is function ', t => t.is(typeof rwc.createWCProto, 'function'))
 test('patcher', t => {
   const mockPatcher = createMockPatcher()
 
-  function createShadowRoot () { return '@ROOT' }
+  function attachShadow () { return '@ROOT' }
 
   const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent())
-  wc.createShadowRoot = createShadowRoot
+  wc.attachShadow = attachShadow
   wc.createdCallback()
   t.is(mockPatcher.root, '@ROOT')
   t.deepEqual(mockPatcher.views, ['<div>0</div>'])
@@ -57,7 +57,7 @@ test('patcher', t => {
 test.cb('dispatch', t => {
   const mockPatcher = createMockPatcher()
 
-  function createShadowRoot () { return '@ROOT' }
+  function attachShadow () { return '@ROOT' }
 
   const component = createMockComponent({
     view ({count}, dispatch) {
@@ -66,7 +66,7 @@ test.cb('dispatch', t => {
     }
   })
   const wc = rwc.createWCProto(mockPatcher.patcher, component)
-  wc.createShadowRoot = createShadowRoot
+  wc.attachShadow = attachShadow
   wc.createdCallback()
   wc.__store.subscribe(x => {
     if (wc.__store.getState().count === 4) {
@@ -85,12 +85,12 @@ test('CustomEvent', t => {
   const events = []
   const mockPatcher = createMockPatcher()
 
-  function createShadowRoot () { return '@ROOT' }
+  function attachShadow () { return '@ROOT' }
 
   const event = new rwc.CustomEvent()
   const update = (state) => [state, event]
   const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({update}))
-  wc.createShadowRoot = createShadowRoot
+  wc.attachShadow = attachShadow
   wc.dispatchEvent = ev => events.push(ev)
   wc.createdCallback()
   t.deepEqual([event], events)
@@ -100,34 +100,34 @@ test('invalid CustomEvent', t => {
   const events = []
   const mockPatcher = createMockPatcher()
 
-  function createShadowRoot () { return '@ROOT' }
+  function attachShadow () { return '@ROOT' }
 
   const update = (state) => [state, null]
   const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({update}))
-  wc.createShadowRoot = createShadowRoot
+  wc.attachShadow = attachShadow
   wc.dispatchEvent = ev => events.push(ev)
   wc.createdCallback()
   t.deepEqual(events, [])
 })
 test('init()', t => {
   const mockPatcher = createMockPatcher()
-  const createShadowRoot = () => '@ROOT'
+  const attachShadow = () => '@ROOT'
   const init = spy(x => ({count: 0}))
   const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({init}))
-  wc.createShadowRoot = createShadowRoot
+  wc.attachShadow = attachShadow
   wc.createdCallback()
   t.true(init.calledWith(wc))
 })
 test('memoize handler', t => {
   let dispatch = null
   const mockPatcher = createMockPatcher()
-  const createShadowRoot = () => '@ROOT'
+  const attachShadow = () => '@ROOT'
   const view = ({count}, _dispatch) => {
     dispatch = _dispatch
     return `<div>${count}</div>`
   }
   const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({view}))
-  wc.createShadowRoot = createShadowRoot
+  wc.attachShadow = attachShadow
   wc.createdCallback()
   t.is(dispatch('XYZ'), dispatch('XYZ'))
 })
