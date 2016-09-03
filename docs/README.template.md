@@ -177,12 +177,24 @@ update (state, {type, params}) {
   switch (type) {
     case '@@attr/some-custom-attribute':
       return {count: state.count + parseInt(params)}
-    case default: return state
+    default: return state
   }
 }
 ```
 
+## Listening to the attached event
+A special action `@@attached` is fired when the component is attached into the DOM. 
+The `param` for this action is the instance of the web component.
 
+```js
+update (state, {type, params}) {
+  switch (type) {
+    case '@@attached':
+      return {width: params.getBoundingClientRect().width}
+    default: return state
+  }
+}
+```
 
 
 {{>main}}
