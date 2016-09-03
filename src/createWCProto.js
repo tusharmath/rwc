@@ -51,7 +51,7 @@ export default (virtualDOMPatcher, component) => {
       this.__handlers = {}
       this.__dispatchActions = this.__dispatchActions.bind(this)
 
-      this.__patch = virtualDOMPatcher(this.createShadowRoot())
+      this.__patch = virtualDOMPatcher(this.attachShadow({mode: 'open'}))
       this.__store = createStore(this.__reducer.bind(this), init(this))
       this.__render()
       this.__dispose = this.__store.subscribe(() => this.__render())
