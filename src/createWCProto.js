@@ -25,6 +25,7 @@ function isArray (i) {
 export default (virtualDOMPatcher, component) => {
   const {update, view, init} = component
   return {
+
     __dispatchActions (type) {
       if (!this.__handlers[type]) {
         this.__handlers[type] = (params) =>
@@ -32,21 +33,25 @@ export default (virtualDOMPatcher, component) => {
       }
       return this.__handlers[type]
     },
+
     __reducer (state, action) {
       const output = update(state, action)
       const [updatedState, event] = isArray(output) ? output : [output, null]
       if (CustomEvent.is(event)) this.dispatchEvent(event)
       return updatedState
     },
+
     __render () {
       this.__patch(view(
         this.__store.getState(),
         this.__dispatchActions
       ))
     },
+
     attributeChangedCallback (name, old, params) {
       this.__store.dispatch({type: `@@attr/${name}`, params})
     },
+
     createdCallback () {
       this.__handlers = {}
       this.__dispatchActions = this.__dispatchActions.bind(this)
@@ -56,6 +61,11 @@ export default (virtualDOMPatcher, component) => {
       this.__render()
       this.__dispose = this.__store.subscribe(() => this.__render())
     },
+
+    attachedCallback () {
+      this.__dispatchActions('@@attached')(this)
+    },
+
     detachedCallback () {
       this.__dispose()
     }

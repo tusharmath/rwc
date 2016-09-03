@@ -139,3 +139,18 @@ test('attachShadow()', t => {
   wc.createdCallback()
   t.deepEqual(attachShadow.args, [[{mode: 'open'}]])
 })
+test('attachedCallback()', t => {
+  let actions = []
+  const mockPatcher = createMockPatcher()
+  const attachShadow = spy(() => '@ROOT')
+  const update = (s, a) => actions.push(a)
+  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({update}))
+  wc.attachShadow = attachShadow
+  wc.createdCallback()
+  wc.attachedCallback()
+
+  t.deepEqual(actions, [
+    {type: '@@redux/INIT'},
+    {type: '@@attached', params: wc}
+  ])
+})
