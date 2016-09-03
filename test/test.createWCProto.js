@@ -131,3 +131,11 @@ test('memoize handler', t => {
   wc.createdCallback()
   t.is(dispatch('XYZ'), dispatch('XYZ'))
 })
+test('attachShadow()', t => {
+  const mockPatcher = createMockPatcher()
+  const attachShadow = spy(() => '@ROOT')
+  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent())
+  wc.attachShadow = attachShadow
+  wc.createdCallback()
+  t.deepEqual(attachShadow.args, [[{mode: 'open'}]])
+})
