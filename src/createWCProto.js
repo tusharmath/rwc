@@ -62,6 +62,10 @@ export default (virtualDOMPatcher, component) => {
       this.__dispose = this.__store.subscribe(() => this.__render())
     },
 
+    attachedCallback () {
+      this.__dispatchActions('@@attached')(this)
+    },
+
     detachedCallback () {
       this.__dispose()
     }
