@@ -139,8 +139,8 @@ The `virtualDOMPatcher` function argument gives the to ability to customize how 
   }
   ```
 
-## Dispatching Custom Events
-For components to communicate with the outside world the component can dispatch a [CustomEvent] via the `update()` function.
+## Communication with other components
+For components to communicate with the outside world and with other components, the `update()` function can return a [CustomEvent] along with the state updates. This [CustomEvent] object is then automatically dispatched as an event which other components can easily listen to.
 
 ```js
 export const update = (state, {type, params}) => {
@@ -166,24 +166,54 @@ export const update = (state, {type, params}) => {
 }
 ```
 
-## Listening to attribute changes
-Attribute changes are fired as [actions] and are namspaced with `@@attr`. For example —
-```html
-<x-counter some-custom-attribute="100" />
-```
-The changes can be observed inside the update function using `@@attr/some-custom-attribute` —
-```js
-update (state, {type, params}) {
-  switch (type) {
-    case '@@attr/some-custom-attribute':
-      return {count: state.count + parseInt(params)}
-    default: return state
-  }
-}
-```
+## Passing data to components
+Data can be passed in two ways —
+
+1.  **Attributes:**
+
+    Attribute changes are fired as [actions] and are namspaced with `@@attr`. These changes can be observed inside the update function by filtering on the `@@attr/some-custom-attribute` action type. The limitation of using attributes is that it only supports data of `string` type, for more complex data one must use `props`.
+
+    ```html
+    <x-counter some-custom-attribute="100" />
+    ```
+    ```js
+    update (state, {type, params}) {
+      switch (type) {
+        case '@@attr/some-custom-attribute':
+          return {count: state.count + parseInt(params)}
+        default: return state
+      }
+    }
+    ```
+2.  **Props:**
+
+    Props can be used by passing an additional `props` param to the `createWCProto` function. The `props` params is a list of property names that `rwc` module must watch changes for. Whenever any of these props are updated an action `@@prop/some-prop-name` will be dispatched automatically.
+
+    ```js
+    const Component = {
+      init () {},
+      update ({state, {type, params}}) {
+        case '@@prop/aa':
+          return /* update state */
+      },
+      view () {},
+      props: ['aa', 'bb', 'cc']
+    }
+    createWCProto(patcher, Component)
+    ```
+    **Unlike attributes, that can be specified via HTML markup, `props` have to specified via JS/hyperscript**
+    ```js
+    view () {
+      return h('div', [
+        h('x-custom-component',
+        {props: {aa: {time: new Date(), age: 10}}})
+      ])
+    }
+    ```
+
 
 ## Listening to the attached event
-A special action `@@attached` is fired when the component is attached into the DOM. 
+A special action `@@attached` is fired when the component is attached into the DOM. This turns out to be really handy when you want to call `getClientBoundingRect()` on the component.
 The `param` for this action is the instance of the web component.
 
 ```js
