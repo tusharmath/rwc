@@ -12,6 +12,7 @@ import CustomEvent from './CustomEvent'
 function isArray (i) {
   return i instanceof Array
 }
+
 /**
  * Creates the prototype for the web component element.
  * @name createWCProto
@@ -23,7 +24,7 @@ function isArray (i) {
  * @return {Object} prototype object for creating HTMLElements
  */
 export default (virtualDOMPatcher, component) => {
-  const {update, view, init} = component
+  const {update, view, init, props = []} = component
   return {
 
     __dispatchActions (type) {
@@ -54,7 +55,18 @@ export default (virtualDOMPatcher, component) => {
 
     createdCallback () {
       this.__handlers = {}
+      this.__props = {}
       this.__dispatchActions = this.__dispatchActions.bind(this)
+
+      props.forEach(p => {
+        Object.defineProperty(this, p, {
+          get: () => this.__props[p],
+          set: (value) => {
+            this.__props[p] = value
+            this.__dispatchActions(`@@prop/${p}`)(value)
+          }
+        })
+      })
 
       this.__patch = virtualDOMPatcher(this.attachShadow({mode: 'open'}))
       this.__store = createStore(this.__reducer.bind(this), init(this))
