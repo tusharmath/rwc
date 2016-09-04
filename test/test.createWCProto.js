@@ -23,6 +23,7 @@ function createMockPatcher () {
 }
 function createMockComponent (params) {
   return Object.assign({
+    props: ['A', 'B'],
     init () {
       return {count: 0}
     },
@@ -152,5 +153,24 @@ test('attachedCallback()', t => {
   t.deepEqual(actions, [
     {type: '@@redux/INIT'},
     {type: '@@attached', params: wc}
+  ])
+})
+test('setProps', t => {
+  let actions = []
+  const mockPatcher = createMockPatcher()
+  const attachShadow = spy(() => '@ROOT')
+  const update = (s, a) => actions.push(a)
+  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({update}))
+  wc.attachShadow = attachShadow
+  wc.createdCallback()
+  wc.attachedCallback()
+  wc['A'] = 100
+  wc['B'] = {a: 1, b: 2}
+  wc['C'] = new Date()
+  t.deepEqual(actions, [
+    {type: '@@redux/INIT'},
+    {type: '@@attached', params: wc},
+    {type: '@@prop/A', params: 100},
+    {type: '@@prop/B', params: {a: 1, b: 2}}
   ])
 })
