@@ -228,3 +228,9 @@ update (state, {type, params}) {
 
 
 {{>main}}
+
+### Show your support
+⭐ this repo
+
+Would really appreciate if you could suggest improvements in docs.
+
