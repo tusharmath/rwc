@@ -57,13 +57,14 @@ export default (virtualDOMPatcher, component) => {
       this.__handlers = {}
       this.__props = {}
       this.__dispatchActions = this.__dispatchActions.bind(this)
+      this.__render = this.__render.bind(this)
 
       props.forEach(p => {
         Object.defineProperty(this, p, {
           get: () => this.__props[p],
-          set: (value) => {
-            this.__props[p] = value
-            this.__dispatchActions(`@@prop/${p}`)(value)
+          set: (params) => {
+            this.__props[p] = params
+            this.__store.dispatch({type: `@@prop/${p}`, params})
           }
         })
       })
@@ -71,11 +72,11 @@ export default (virtualDOMPatcher, component) => {
       this.__patch = virtualDOMPatcher(this.attachShadow({mode: 'open'}))
       this.__store = createStore(this.__reducer.bind(this), init(this))
       this.__render()
-      this.__dispose = this.__store.subscribe(() => this.__render())
+      this.__dispose = this.__store.subscribe(this.__render)
     },
 
     attachedCallback () {
-      this.__dispatchActions('@@attached')(this)
+      this.__store.dispatch({type: '@@attached', params: this})
     },
 
     detachedCallback () {
