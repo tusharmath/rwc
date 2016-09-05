@@ -246,3 +246,9 @@ Creates the prototype for the web component element.
 | component.update | <code>function</code> | a redux reducer for updating component state. |
 | component.view | <code>function</code> | takes in the state and returns a dom tree. |
 
+
+### Show your support
+⭐ this repo
+
+Would really appreciate if you could suggest improvements in docs.
+
