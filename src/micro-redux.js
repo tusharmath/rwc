@@ -28,7 +28,9 @@ export class Store {
     if (this.__dispatching) return
     this.__dispatching = true
     this.__state = this.__reducer(this.__state, action)
-    this.__listners.forEach(i => i(this.__state))
+    for (let i = 0; i < this.__listners.length; i++) {
+      this.__listners[i](this.__state)
+    }
     this.__dispatching = false
   }
 }
