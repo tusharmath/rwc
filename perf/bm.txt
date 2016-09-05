@@ -1,0 +1,1 @@
+dispatch() x 36,086,872 ops/sec ±0.96% (83 runs sampled)
