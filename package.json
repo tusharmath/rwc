@@ -72,7 +72,6 @@
     "validate-commit-msg": "^2.8.0"
   },
   "dependencies": {
-    "redux": "^3.5.2",
     "window-or-global": "^1.0.1"
   }
 }

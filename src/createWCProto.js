@@ -6,7 +6,7 @@
  */
 'use strict'
 
-import {createStore} from 'redux'
+import {createStore} from './micro-redux'
 import CustomEvent from './CustomEvent'
 
 function isArray (i) {
