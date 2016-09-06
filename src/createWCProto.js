@@ -1,5 +1,5 @@
 /**
- * @module raf
+ * @module rwc
  */
 /**
  * Created by tushar.mathur on 01/09/16.

@@ -174,24 +174,24 @@ export const update = (state, {type, params}) => {
 }
 ```
 
-## @@raf actions
-RAF dispatches custom actions which can be used inside the `update()` function, during the lifecycle of the web component.
-- `@@raf/created`: Fired when the web component is initialized. The `param` for this action is the instance of the web component.
-- `@@raf/attached`: Dispatched when the web component is inserted into the DOM. This is a good time to call something like `params.getBoundingClientRect()` to get the dimensions of the web component and keep it in the state.
-- `@@raf/detached`: Dispatched when the component is remove from the DOM.
-- `@@raf/attr/<attr name>`: This is fired whenever a web component's attribute is changed. The `param` is the current value of the attribute.
-- `@@raf/prop/<prop name>`: Attributes have a limitation of passing data that is of `string` type only. For this purpose you can predefine some `props` that `raf` will attach hooks on and whenever they are changed, this particular action will be fired.
+## @@rwc actions
+**RWC** dispatches custom actions which can be used inside the `update()` function, during the lifecycle of the web component.
+- `@@rwc/created`: Fired when the web component is initialized. The `param` for this action is the instance of the web component.
+- `@@rwc/attached`: Dispatched when the web component is inserted into the DOM. This is a good time to call something like `params.getBoundingClientRect()` to get the dimensions of the web component and keep it in the state.
+- `@@rwc/detached`: Dispatched when the component is remove from the DOM.
+- `@@rwc/attr/<attr name>`: This is fired whenever a web component's attribute is changed. The `param` is the current value of the attribute.
+- `@@rwc/prop/<prop name>`: Attributes have a limitation of passing data that is of `string` type only. For this purpose you can predefine some `props` that `rwc` will attach hooks on and whenever they are changed, this particular action will be fired.
   ```js
   // create a list of props
   const props = ['aa', 'bb']
 
   // pass props to the factory function
-  const const proto = raf.createWCProto(patcher, {update, init, view, props})
+  const proto = rwc.createWCProto(patcher, {update, init, view, props})
 
   // an instance is automatically created by the browser
   const wc = Object.create(proto)
 
-  // this will fire action {type: '@@raf/prop/aa', param: wc}
+  // this will fire action {type: '@@rwc/prop/aa', param: wc}
   wc.aa = new Date()
   ```
 
