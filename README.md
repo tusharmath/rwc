@@ -178,6 +178,7 @@ export const update = (state, {type, params}) => {
 RAF dispatches custom actions which can be used inside the `update()` function, during the lifecycle of the web component.
 - `@@raf/created`: Fired when the web component is initialized. The `param` for this action is the instance of the web component.
 - `@@raf/attached`: Dispatched when the web component is inserted into the DOM. This is a good time to call something like `params.getBoundingClientRect()` to get the dimensions of the web component and keep it in the state.
+- `@@raf/detached`: Dispatched when the component is remove from the DOM.
 - `@@raf/attr/<attr name>`: This is fired whenever a web component's attribute is changed. The `param` is the current value of the attribute.
 - `@@raf/prop/<prop name>`: Attributes have a limitation of passing data that is of `string` type only. For this purpose you can predefine some `props` that `raf` will attach hooks on and whenever they are changed, this particular action will be fired.
   ```js
