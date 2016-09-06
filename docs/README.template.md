@@ -175,10 +175,10 @@ export const update = (state, {type, params}) => {
 ```
 
 ## @@rwc actions
-**RWC** dispatches custom actions which can be used inside the `update()` function, during the lifecycle of the web component.
-- `@@rwc/created`: Fired when the web component is initialized. The `param` for this action is the instance of the web component.
+**RWC** dispatches custom actions during the lifecycle of the web component, which can be used inside the `update()` function.
+- `@@rwc/created`: Fired when the web component is initialized. The `params` for this action is the instance of the web component.
 - `@@rwc/attached`: Dispatched when the web component is inserted into the DOM. This is a good time to call something like `params.getBoundingClientRect()` to get the dimensions of the web component and keep it in the state.
-- `@@rwc/detached`: Dispatched when the component is remove from the DOM.
+- `@@rwc/detached`: Dispatched when the component is removed from the DOM.
 - `@@rwc/attr/<attr name>`: This is fired whenever a web component's attribute is changed. The `param` is the current value of the attribute.
 - `@@rwc/prop/<prop name>`: Attributes have a limitation of passing data that is of `string` type only. For this purpose you can predefine some `props` that `rwc` will attach hooks on and whenever they are changed, this particular action will be fired.
   ```js
