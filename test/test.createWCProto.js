@@ -151,7 +151,7 @@ test('attachedCallback()', t => {
   wc.attachedCallback()
 
   t.deepEqual(actions, [
-    {type: '@@rwc/created'},
+    {type: '@@rwc/created', params: wc},
     {type: '@@rwc/attached', params: wc}
   ])
 })
@@ -168,7 +168,7 @@ test('setProps', t => {
   wc['B'] = {a: 1, b: 2}
   wc['C'] = new Date()
   t.deepEqual(actions, [
-    {type: '@@rwc/created'},
+    {type: '@@rwc/created', params: wc},
     {type: '@@rwc/attached', params: wc},
     {type: '@@rwc/prop/A', params: 100},
     {type: '@@rwc/prop/B', params: {a: 1, b: 2}}
@@ -196,4 +196,23 @@ test('__dispatchActions({stopPropagation: true})', t => {
   wc.__dispatchActions('MOVE', {stopPropagation: true})(mockEV)
   t.true(mockEV.stopPropagation.called)
 })
+test('detachedCallback()', t => {
+  const actions = []
+  const mockPatcher = createMockPatcher()
+  const attachShadow = () => '@ROOT'
+  const update = (state, action) => {
+    actions.push(action)
+    return state
+  }
+  const component = createMockComponent({update})
+  const wc = rwc.createWCProto(mockPatcher.patcher, component)
+  wc.attachShadow = attachShadow
+  wc.createdCallback()
+  wc.detachedCallback()
+  t.deepEqual(actions, [
+    {type: '@@rwc/created', params: wc},
+    {type: '@@rwc/detached', params: wc}
+  ])
+})
+
 
