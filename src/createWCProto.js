@@ -27,10 +27,13 @@ export default (virtualDOMPatcher, component) => {
   const {update, view, init, props = []} = component
   return {
 
-    __dispatchActions (type) {
+    __dispatchActions (type, options = {}) {
       if (!this.__handlers[type]) {
-        this.__handlers[type] = (params) =>
+        this.__handlers[type] = (params) => {
+          if (options.preventDefault) params.preventDefault()
+          if (options.stopPropagation) params.stopPropagation()
           this.__store.dispatch({type, params})
+        }
       }
       return this.__handlers[type]
     },
