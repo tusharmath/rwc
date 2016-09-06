@@ -214,5 +214,3 @@ test('detachedCallback()', t => {
     {type: '@@rwc/detached', params: wc}
   ])
 })
-
-
