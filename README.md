@@ -147,8 +147,8 @@ The `virtualDOMPatcher` function argument gives the to ability to customize how 
   }
   ```
 
-## Communication with other components
-For components to communicate with the outside world and with other components, the `update()` function can return a [CustomEvent] along with the state updates. This [CustomEvent] object is then automatically dispatched as an event which other components can easily listen to.
+## Component communication
+Web components communicate with the outside world using events. The component's `update()` function can return a [CustomEvent] along with the state updates for such purposes. This [CustomEvent] object is then automatically dispatched as an event which other components can easily listen to by using `addEventListener`.
 
 ```js
 export const update = (state, {type, params}) => {
@@ -174,65 +174,25 @@ export const update = (state, {type, params}) => {
 }
 ```
 
-## Passing data to components
-Data can be passed in two ways —
+## @@raf actions
+RAF dispatches custom actions which can be used inside the `update()` function, during the lifecycle of the web component.
+- `@@raf/created`: Fired when the web component is initialized. The `param` for this action is the instance of the web component.
+- `@@raf/attached`: Dispatched when the web component is inserted into the DOM. This is a good time to call something like `params.getBoundingClientRect()` to get the dimensions of the web component and keep it in the state.
+- `@@raf/attr/<attr name>`: This is fired whenever a web component's attribute is changed. The `param` is the current value of the attribute.
+- `@@raf/prop/<prop name>`: Attributes have a limitation of passing data that is of `string` type only. For this purpose you can predefine some `props` that `raf` will attach hooks on and whenever they are changed, this particular action will be fired.
+  ```js
+  // create a list of props
+  const props = ['aa', 'bb']
 
-1.  **Attributes:**
+  // pass props to the factory function
+  const const proto = raf.createWCProto(patcher, {update, init, view, props})
 
-    Attribute changes are fired as [actions] and are namspaced with `@@attr`. These changes can be observed inside the update function by filtering on the `@@attr/some-custom-attribute` action type. The limitation of using attributes is that it only supports data of `string` type, for more complex data one must use `props`.
+  // an instance is automatically created by the browser
+  const wc = Object.create(proto)
 
-    ```html
-    <x-counter some-custom-attribute="100" />
-    ```
-    ```js
-    update (state, {type, params}) {
-      switch (type) {
-        case '@@attr/some-custom-attribute':
-          return {count: state.count + parseInt(params)}
-        default: return state
-      }
-    }
-    ```
-2.  **Props:**
-
-    Props can be used by passing an additional `props` param to the `createWCProto` function. The `props` params is a list of property names that `rwc` module must watch changes for. Whenever any of these props are updated an action `@@prop/some-prop-name` will be dispatched automatically.
-
-    ```js
-    const Component = {
-      init () {},
-      update ({state, {type, params}}) {
-        case '@@prop/aa':
-          return /* update state */
-      },
-      view () {},
-      props: ['aa', 'bb', 'cc']
-    }
-    createWCProto(patcher, Component)
-    ```
-    **Unlike attributes, that can be specified via HTML markup, `props` have to specified via JS/hyperscript**
-    ```js
-    view () {
-      return h('div', [
-        h('x-custom-component',
-        {props: {aa: {time: new Date(), age: 10}}})
-      ])
-    }
-    ```
-
-
-## Listening to the attached event
-A special action `@@attached` is fired when the component is attached into the DOM. This turns out to be really handy when you want to call `getClientBoundingRect()` on the component.
-The `param` for this action is the instance of the web component.
-
-```js
-update (state, {type, params}) {
-  switch (type) {
-    case '@@attached':
-      return {width: params.getBoundingClientRect().width}
-    default: return state
-  }
-}
-```
+  // this will fire action {type: '@@raf/prop/aa', param: wc}
+  wc.aa = new Date()
+  ```
 
 
 <a name="module_raf"></a>
@@ -258,5 +218,5 @@ Creates the prototype for the web component element.
 ### Show your support
 ⭐ this repo
 
-Would really appreciate if you could suggest improvements in docs.
+Would greatly appreciate if you could provide feedback.
 
