@@ -96,12 +96,20 @@ The `virtualDOMPatcher` function argument gives the to ability to customize how 
 
   ```js
   import snabbdom from 'snabbdom'
+  import h from 'snabbdom/h'
+
+  const patch = snabbdom.init([
+    require('snabbdom/modules/class'),
+    require('snabbdom/modules/props'),
+    require('snabbdom/modules/style'),
+    require('snabbdom/modules/eventlisteners')
+  ])
 
   function virtualDOMPatcher (shadowRoot) {
-    const patch = snabbdom.init()
+    // create wrapper element
     let __vNode = shadowRoot.appendChild(document.createElement('div'))
     return function (vNode) {
-      __vNode = patch(__vNode, vNode)
+      __vNode = patch(h('div', [__vNode]), vNode)
     }
   }
   ```
