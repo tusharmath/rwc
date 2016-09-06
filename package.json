@@ -29,6 +29,7 @@
       "path": "./node_modules/cz-conventional-changelog"
     },
     "ghooks": {
+      "pre-commit": "npm run lint",
       "commit-msg": "validate-commit-msg"
     },
     "validate-commit-msg": {

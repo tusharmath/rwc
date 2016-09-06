@@ -1,5 +1,5 @@
 /**
- * @module raf
+ * @module rwc
  */
 /**
  * Created by tushar.mathur on 01/09/16.
@@ -26,13 +26,15 @@ function isArray (i) {
 export default (virtualDOMPatcher, component) => {
   const {update, view, init, props = []} = component
   return {
-
+    __dispatch (type, params) {
+      this.__store.dispatch({type, params})
+    },
     __dispatchActions (type, options = {}) {
       if (!this.__handlers[type]) {
         this.__handlers[type] = (params) => {
           if (options.preventDefault) params.preventDefault()
           if (options.stopPropagation) params.stopPropagation()
-          this.__store.dispatch({type, params})
+          this.__dispatch(type, params)
         }
       }
       return this.__handlers[type]
@@ -53,35 +55,37 @@ export default (virtualDOMPatcher, component) => {
     },
 
     attributeChangedCallback (name, old, params) {
-      this.__store.dispatch({type: `@@attr/${name}`, params})
+      this.__dispatch(`@@rwc/attr/${name}`, params)
     },
 
     createdCallback () {
       this.__handlers = {}
       this.__props = {}
       this.__dispatchActions = this.__dispatchActions.bind(this)
+      this.__render = this.__render.bind(this)
 
       props.forEach(p => {
         Object.defineProperty(this, p, {
           get: () => this.__props[p],
-          set: (value) => {
-            this.__props[p] = value
-            this.__dispatchActions(`@@prop/${p}`)(value)
+          set: (params) => {
+            this.__props[p] = params
+            this.__dispatch(`@@rwc/prop/${p}`, params)
           }
         })
       })
 
       this.__patch = virtualDOMPatcher(this.attachShadow({mode: 'open'}))
       this.__store = createStore(this.__reducer.bind(this), init(this))
+      this.__store.dispatch({type: '@@rwc/created', params: this})
       this.__render()
-      this.__dispose = this.__store.subscribe(() => this.__render())
+      this.__dispose = this.__store.subscribe(this.__render)
     },
 
     attachedCallback () {
-      this.__dispatchActions('@@attached')(this)
+      this.__dispatch('@@rwc/attached', this)
     },
-
     detachedCallback () {
+      this.__dispatch('@@rwc/detached', this)
       this.__dispose()
     }
   }
