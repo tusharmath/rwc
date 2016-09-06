@@ -26,13 +26,12 @@ npm install rwc --save
 
 ## Features
 
-- RAF is awfully small (110 SLOC) with no dependencies at all (uses a simpler version of [redux]) this makes is much easier to share components.
-- Uses a reactive approach where you have `actions` that trigger an `update` on the `state` which triggers the updation of the `view`.
-- You can use multiple virtual dom implementations at the same time for different components.
-- Event handlers are created once and cached until the component is removed from the DOM. This gives a significant performance boost between renders and reduces the work for the garbage collector.
-- Virtual DOM comparisons are done at individual component level and not at the root which adds to better performance.
-- Supports passing of non `string` type data using `props`.
-- Inter-component communication can be done by dispatching a [CustomEvent].
+- Small footprint (110 SLOC) with no dependencies at all (uses a bare bones version of [redux]).
+- Reactive approach — `actions` trigger an `update` on the `state` which triggers `view` updation.
+- Can integrate with multiple virtual dom implementations like [preact] or [snabbdom] simulataneously.
+- Caches event handler between renders.
+- Passes proper JS objects to components using `props`.
+- Dispatches [CustomEvent] for intercomponent communication.
 
 ## Paradigm
 

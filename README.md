@@ -26,12 +26,12 @@ npm install rwc --save
 
 ## Features
 
-- Small footprint (110 SLOC) with no dependencies at all (uses a simpler version of [redux]).
+- Small footprint (110 SLOC) with no dependencies at all (uses a bare bones version of [redux]).
 - Reactive approach — `actions` trigger an `update` on the `state` which triggers `view` updation.
-- Integrates with multiple virtual dom implementations like [preact] or [snabbdom] simulataneously.
-- Event handler caching between renders.
-- Pass proper JS objects to components using `props`.
-- Use of [CustomEvent] for intercomponent communication
+- Can integrate with multiple virtual dom implementations like [preact] or [snabbdom] simulataneously.
+- Caches event handler between renders.
+- Passes proper JS objects to components using `props`.
+- Dispatches [CustomEvent] for intercomponent communication.
 
 ## Paradigm
 
