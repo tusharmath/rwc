@@ -24,11 +24,21 @@ This approach is an attempt to find a balance between a [scalable paradigm] and 
 npm install rwc --save
 ```
 
+## Features
+
+- Small footprint (110 SLOC) with no dependencies at all (uses a bare bones version of [redux]).
+- Reactive approach — `actions` trigger an `update` on the `state` which triggers `view` updation.
+- Can integrate with multiple virtual dom implementations like [preact] or [snabbdom] simulataneously.
+- Caches event handler between renders.
+- Passes proper JS objects to components using `props`.
+- Dispatches [CustomEvent] for intercomponent communication.
+
 ## Paradigm
+
 Components are composed of three functions —
   - `init(component)` : The function takes in the current instance of the component and returns the initial state.
-  - `update(state, action)`: A [reducer] function like that in [Redux] that takes an input `state` and based on the `action` returns a new output state. Additionally it can return a tuple (an array) of two elements containing both the `state` and an object of [CustomEvent] type, which is dispatched as a DOM event.
-  - `view(state, dispatch)`: The view function converts the `state` into a virtual DOM tree. Additionally it also gets a `dispatch()` function which can dispatch [actions] on DOM events.
+  - `update(state, action)`: A [reducer] function like that in [Redux] that takes an input `state` and based on the `action` returns a new output state.
+  - `view(state, dispatch)`: The view function converts the `state` into a virtual DOM tree. Additionally it also gets a `dispatch()` function as an argument which can dispatch custom [actions].
 
 All these three functions are essentially pure functions, ie. they have no side effects and should remain referentially transparent for all practical purposes.
 
@@ -44,7 +54,7 @@ const init = () => {
   return {count: 0}
 }
 
-// Reducer function for redux
+// Reducer function like that in redux
 const update = (state, {type, params}) => {
   switch (type) {
     case 'INC': return {count: state.count + 1}
@@ -54,9 +64,9 @@ const update = (state, {type, params}) => {
 }
 
 // Creates virtual DOM elements
-const view = ({count}, dispatch) => {
+const view = (state, dispatch) => {
   return h('div', [
-    h('h1', [count]),
+    h('h1', [state.count]),
     h('button', {on: {click: dispatch('INC')}}, ['Increment']),
     h('button', {on: {click: dispatch('DEC')}}, ['Decrement'])
   ])
@@ -195,6 +205,21 @@ export const update = (state, {type, params}) => {
   wc.aa = new Date()
   ```
 
+## Modifying events
+
+In certain scenarios one might want to call `preventDefault()` or `stopPropagation()` on the events that are emitted. This can be easily done by passing additional params to the `dispatch` function in the view.
+
+```js
+const view = (state, dispatch) =>
+  h('div', [
+    h('a', {
+      href: '/example.com',
+      on: {click: dispatch('CLICK', {preventDefault: true, stopPropagation: true})}
+      }, [
+      'Click Me!'
+    ])
+  ])
+```
 
 {{>main}}
 
