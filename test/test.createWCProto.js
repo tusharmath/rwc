@@ -174,3 +174,26 @@ test('setProps', t => {
     {type: '@@prop/B', params: {a: 1, b: 2}}
   ])
 })
+test('__dispatchActions({preventDefault: true})', t => {
+  const mockPatcher = createMockPatcher()
+  const mockEV = {preventDefault: spy()}
+  const attachShadow = () => '@ROOT'
+  const component = createMockComponent()
+  const wc = rwc.createWCProto(mockPatcher.patcher, component)
+  wc.attachShadow = attachShadow
+  wc.createdCallback()
+  wc.__dispatchActions('MOVE', {preventDefault: true})(mockEV)
+  t.true(mockEV.preventDefault.called)
+})
+test('__dispatchActions({stopPropagation: true})', t => {
+  const mockPatcher = createMockPatcher()
+  const mockEV = {stopPropagation: spy()}
+  const attachShadow = () => '@ROOT'
+  const component = createMockComponent()
+  const wc = rwc.createWCProto(mockPatcher.patcher, component)
+  wc.attachShadow = attachShadow
+  wc.createdCallback()
+  wc.__dispatchActions('MOVE', {stopPropagation: true})(mockEV)
+  t.true(mockEV.stopPropagation.called)
+})
+
