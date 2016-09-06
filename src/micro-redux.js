@@ -10,14 +10,14 @@ export class Store {
   constructor (reducer, state) {
     this.__reducer = reducer
     this.__state = state
-    this.__listners = []
+    this.__listeners = []
     this.__dispatching = false
     this.dispatch(INIT)
   }
 
   subscribe (listener) {
-    const i = this.__listners.push(listener)
-    return () => this.__listners.splice(i - 1, 1)
+    const i = this.__listeners.push(listener)
+    return () => this.__listeners.splice(i - 1, 1)
   }
 
   getState () {
@@ -28,8 +28,8 @@ export class Store {
     if (this.__dispatching) return
     this.__dispatching = true
     this.__state = this.__reducer(this.__state, action)
-    for (let i = 0; i < this.__listners.length; i++) {
-      this.__listners[i](this.__state)
+    for (let i = 0; i < this.__listeners.length; i++) {
+      this.__listeners[i](this.__state)
     }
     this.__dispatching = false
   }
