@@ -50,7 +50,7 @@ export default (virtualDOMPatcher, component) => {
     },
 
     attributeChangedCallback (name, old, params) {
-      this.__store.dispatch({type: `@@attr/${name}`, params})
+      this.__store.dispatch({type: `@@rwc/attr/${name}`, params})
     },
 
     createdCallback () {
@@ -64,22 +64,23 @@ export default (virtualDOMPatcher, component) => {
           get: () => this.__props[p],
           set: (params) => {
             this.__props[p] = params
-            this.__store.dispatch({type: `@@prop/${p}`, params})
+            this.__store.dispatch({type: `@@rwc/prop/${p}`, params})
           }
         })
       })
 
       this.__patch = virtualDOMPatcher(this.attachShadow({mode: 'open'}))
       this.__store = createStore(this.__reducer.bind(this), init(this))
+      this.__store.dispatch({type: '@@rwc/created'})
       this.__render()
       this.__dispose = this.__store.subscribe(this.__render)
     },
 
     attachedCallback () {
-      this.__store.dispatch({type: '@@attached', params: this})
+      this.__store.dispatch({type: '@@rwc/attached', params: this})
     },
-
     detachedCallback () {
+      this.__store.dispatch({type: '@@rwc/detached', params: this})
       this.__dispose()
     }
   }

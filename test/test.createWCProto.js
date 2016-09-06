@@ -151,8 +151,8 @@ test('attachedCallback()', t => {
   wc.attachedCallback()
 
   t.deepEqual(actions, [
-    {type: '@@redux/INIT'},
-    {type: '@@attached', params: wc}
+    {type: '@@rwc/created'},
+    {type: '@@rwc/attached', params: wc}
   ])
 })
 test('setProps', t => {
@@ -168,9 +168,9 @@ test('setProps', t => {
   wc['B'] = {a: 1, b: 2}
   wc['C'] = new Date()
   t.deepEqual(actions, [
-    {type: '@@redux/INIT'},
-    {type: '@@attached', params: wc},
-    {type: '@@prop/A', params: 100},
-    {type: '@@prop/B', params: {a: 1, b: 2}}
+    {type: '@@rwc/created'},
+    {type: '@@rwc/attached', params: wc},
+    {type: '@@rwc/prop/A', params: 100},
+    {type: '@@rwc/prop/B', params: {a: 1, b: 2}}
   ])
 })

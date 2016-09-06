@@ -4,15 +4,12 @@
 
 'use strict'
 
-const INIT = {type: '@@redux/INIT'}
-
 export class Store {
   constructor (reducer, state) {
     this.__reducer = reducer
     this.__state = state
     this.__listeners = []
     this.__dispatching = false
-    this.dispatch(INIT)
   }
 
   subscribe (listener) {
