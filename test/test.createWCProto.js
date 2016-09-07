@@ -42,7 +42,7 @@ function createMockComponent (params) {
     }
   }, params)
 }
-test.afterEach(() => delete global.CustomEvent)
+test.afterEach(() => delete global.Event)
 test('is function ', t => t.is(typeof rwc.createWCProto, 'function'))
 test('patcher', t => {
   const mockPatcher = createMockPatcher()
@@ -82,13 +82,13 @@ test.cb('dispatch', t => {
     }
   })
 })
-test('CustomEvent', t => {
+test('Event', t => {
   const events = []
   const mockPatcher = createMockPatcher()
 
   function attachShadow () { return '@ROOT' }
 
-  const event = new rwc.CustomEvent()
+  const event = new rwc.Event()
   const update = (state) => [state, event]
   const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({update}))
   wc.attachShadow = attachShadow
@@ -96,8 +96,8 @@ test('CustomEvent', t => {
   wc.createdCallback()
   t.deepEqual([event], events)
 })
-test('invalid CustomEvent', t => {
-  global.CustomEvent = function () {}
+test('invalid Event', t => {
+  global.Event = function () {}
   const events = []
   const mockPatcher = createMockPatcher()
 

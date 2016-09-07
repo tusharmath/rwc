@@ -7,7 +7,7 @@
 'use strict'
 
 import {createStore} from './micro-redux'
-import CustomEvent from './CustomEvent'
+import Event from './Event'
 
 function isArray (i) {
   return i instanceof Array
@@ -43,7 +43,7 @@ export default (virtualDOMPatcher, component) => {
     __reducer (state, action) {
       const output = update(state, action)
       const [updatedState, event] = isArray(output) ? output : [output, null]
-      if (CustomEvent.is(event)) this.dispatchEvent(event)
+      if (Event.is(event)) this.dispatchEvent(event)
       return updatedState
     },
 
