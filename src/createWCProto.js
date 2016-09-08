@@ -43,7 +43,10 @@ export default (virtualDOMPatcher, component) => {
     __reducer (state, action) {
       const output = update(state, action)
       const [updatedState, event] = isArray(output) ? output : [output, null]
-      if (Event.is(event)) this.dispatchEvent(event)
+      if (Event.is(event)) {
+        this.dispatchEvent(event)
+        this.__dispatch(`@@rwc/event/${event.type}`, event)
+      }
       return updatedState
     },
 
