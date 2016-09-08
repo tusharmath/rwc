@@ -6,7 +6,7 @@
 
 import rwc from '../src'
 import test from 'ava'
-import {spy} from 'sinon'
+import {spy, stub} from 'sinon'
 
 function createMockPatcher () {
   const output = {
@@ -213,4 +213,25 @@ test('detachedCallback()', t => {
     {type: '@@rwc/created', params: wc},
     {type: '@@rwc/detached', params: wc}
   ])
+})
+test('__reducer', t => {
+  const actions = []
+  const mockPatcher = createMockPatcher()
+  const mockEV = new rwc.Event('poodle')
+  const update = (state, action) => {
+    actions.push(action)
+    return [state, mockEV]
+  }
+  const component = createMockComponent({update})
+  const wc = rwc.createWCProto(mockPatcher.patcher, component)
+  wc.attachShadow = () => '@ROOT'
+  wc.dispatchEvent = stub()
+  wc.createdCallback()
+  wc.__reducer({}, {type: 'A', params: 'a'})
+  t.deepEqual(actions, [
+    {type: '@@rwc/created', params: wc},
+    {type: 'A', params: 'a'},
+    {type: '@@rwc/event/poodle', params: mockEV}
+  ])
+  t.true(wc.dispatchEvent.calledWith(mockEV))
 })

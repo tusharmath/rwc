@@ -14,6 +14,7 @@ This approach is an attempt to find a balance between a [scalable paradigm] and 
 [reducer]:           http://redux.js.org/docs/basics/Reducers.html
 [ELM architecture]:  http://guide.elm-lang.org/architecture/
 [CustomEvent]:       https://developer.mozilla.org/en/docs/Web/API/CustomEvent
+[Event]:             https://developer.mozilla.org/en-US/docs/Web/API/Event
 [snabbdom]:          https://github.com/paldepind/snabbdom
 [ShadowRoot]:        https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot
 [actions]:           http://redux.js.org/docs/basics/Actions.html
@@ -31,7 +32,7 @@ npm install rwc --save
 - Can integrate with multiple virtual dom implementations like [preact] or [snabbdom] simulataneously.
 - Caches event handler between renders.
 - Passes proper JS objects to components using `props`.
-- Dispatches [CustomEvent] for intercomponent communication.
+- Automatically dispatches [Event] types for inter-component communication.
 
 ## Paradigm
 
@@ -189,6 +190,7 @@ export const update = (state, {type, params}) => {
 - `@@rwc/created`: Fired when the web component is initialized. The `params` for this action is the instance of the web component.
 - `@@rwc/attached`: Dispatched when the web component is inserted into the DOM. This is a good time to call something like `params.getBoundingClientRect()` to get the dimensions of the web component and keep it in the state.
 - `@@rwc/detached`: Dispatched when the component is removed from the DOM.
+- `@@rwc/event/<event name>`: Whenever an [Event] type is returned from the `update` function, this action is automatically fired.
 - `@@rwc/attr/<attr name>`: This is fired whenever a web component's attribute is changed. The `param` is the current value of the attribute.
 - `@@rwc/prop/<prop name>`: Attributes have a limitation of passing data that is of `string` type only. For this purpose you can predefine some `props` that `rwc` will attach hooks on and whenever they are changed, this particular action will be fired.
   ```js
