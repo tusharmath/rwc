@@ -14,6 +14,7 @@ This approach is an attempt to find a balance between a [scalable paradigm] and 
 [reducer]:           http://redux.js.org/docs/basics/Reducers.html
 [ELM architecture]:  http://guide.elm-lang.org/architecture/
 [CustomEvent]:       https://developer.mozilla.org/en/docs/Web/API/CustomEvent
+[Event]:             https://developer.mozilla.org/en-US/docs/Web/API/Event
 [snabbdom]:          https://github.com/paldepind/snabbdom
 [ShadowRoot]:        https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot
 [actions]:           http://redux.js.org/docs/basics/Actions.html
@@ -31,7 +32,7 @@ npm install rwc --save
 - Can integrate with multiple virtual dom implementations like [preact] or [snabbdom] simulataneously.
 - Caches event handler between renders.
 - Passes proper JS objects to components using `props`.
-- Dispatches [CustomEvent] for intercomponent communication.
+- Automatically dispatches [Event] types for inter-component communication.
 
 ## Paradigm
 
