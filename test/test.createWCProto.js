@@ -214,7 +214,7 @@ test('detachedCallback()', t => {
     {type: '@@rwc/detached', params: wc}
   ])
 })
-test('__reducer', t => {
+test('rwc.__reducer()', t => {
   const actions = []
   const mockPatcher = createMockPatcher()
   const mockEV = new rwc.Event('poodle')
@@ -230,8 +230,7 @@ test('__reducer', t => {
   wc.__reducer({}, {type: 'A', params: 'a'})
   t.deepEqual(actions, [
     {type: '@@rwc/created', params: wc},
-    {type: 'A', params: 'a'},
-    {type: '@@rwc/event/poodle', params: mockEV}
+    {type: 'A', params: 'a'}
   ])
   t.true(wc.dispatchEvent.calledWith(mockEV))
 })

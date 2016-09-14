@@ -45,7 +45,6 @@ export default (virtualDOMPatcher, component) => {
       const [updatedState, event] = isArray(output) ? output : [output, null]
       if (Event.is(event)) {
         this.dispatchEvent(event)
-        this.__dispatch(`@@rwc/event/${event.type}`, event)
       }
       return updatedState
     },
