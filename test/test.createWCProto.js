@@ -235,3 +235,17 @@ test('__reducer', t => {
   ])
   t.true(wc.dispatchEvent.calledWith(mockEV))
 })
+test('createdCallback():copy-initial-values', t => {
+  const mockPatcher = createMockPatcher()
+  const attachShadow = () => '@ROOT'
+  const component = createMockComponent()
+  const wc = rwc.createWCProto(mockPatcher.patcher, component)
+  wc.attachShadow = attachShadow
+  wc['A'] = 'aaa-initial-value'
+  wc['B'] = 'bbb-initial-value'
+  wc['C'] = 'ccc-initial-value'
+  wc.createdCallback()
+  t.is(wc['A'], 'aaa-initial-value')
+  t.is(wc['B'], 'bbb-initial-value')
+  t.is(wc['C'], 'ccc-initial-value')
+})

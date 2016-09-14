@@ -68,6 +68,7 @@ export default (virtualDOMPatcher, component) => {
       this.__render = this.__render.bind(this)
 
       props.forEach(p => {
+        this.__props[p] = this[p]
         Object.defineProperty(this, p, {
           get: () => this.__props[p],
           set: (params) => {
