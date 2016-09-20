@@ -244,7 +244,9 @@ test('createdCallback():copy-initial-values', t => {
   wc['B'] = 'bbb-initial-value'
   wc['C'] = 'ccc-initial-value'
   wc.createdCallback()
-  t.is(wc['A'], 'aaa-initial-value')
-  t.is(wc['B'], 'bbb-initial-value')
+  t.is(wc['A'])
+  t.is(wc['B'])
+  t.is(wc.props['A'], 'aaa-initial-value')
+  t.is(wc.props['B'], 'bbb-initial-value')
   t.is(wc['C'], 'ccc-initial-value')
 })
