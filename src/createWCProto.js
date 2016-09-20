@@ -62,16 +62,16 @@ export default (virtualDOMPatcher, component) => {
 
     createdCallback () {
       this.__handlers = {}
-      this.__props = {}
+      this.props = {}
       this.__dispatchActions = this.__dispatchActions.bind(this)
       this.__render = this.__render.bind(this)
 
       props.forEach(p => {
-        this.__props[p] = this[p]
+        this.props[p] = this[p]
         Object.defineProperty(this, p, {
-          get: () => this.__props[p],
+          get: () => undefined,
           set: (params) => {
-            this.__props[p] = params
+            this.props[p] = params
             this.__dispatch(`@@rwc/prop/${p}`, params)
           }
         })
