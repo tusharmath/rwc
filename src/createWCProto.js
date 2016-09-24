@@ -1,14 +1,14 @@
 /**
- * @module rwc
- */
-/**
  * Created by tushar.mathur on 01/09/16.
  */
 'use strict'
 
 import {createStore} from './micro-redux'
+/**
+ * @module rwc
+ */
 
-function isArray (i) {
+function isTuple (i) {
   return i instanceof Array
 }
 
@@ -41,7 +41,7 @@ export default (virtualDOMPatcher, component) => {
 
     __reducer (state, action) {
       const output = update(state, action)
-      const [updatedState, task] = isArray(output) ? output : [output, null]
+      const [updatedState, task] = isTuple(output) ? output : [output, null]
       if (task) task.run(this, this.__dispatchStoreAction)
       return updatedState
     },
@@ -58,10 +58,16 @@ export default (virtualDOMPatcher, component) => {
     },
 
     createdCallback () {
+      /**
+       * bind with this
+       */
+      this.__dispatchStoreAction = this.__dispatchStoreAction.bind(this)
+      this.__domEventHandler = this.__domEventHandler.bind(this)
+      this.__reducer = this.__reducer.bind(this)
+      this.__render = this.__render.bind(this)
+
       this.__handlers = {}
       this.props = {}
-      this.__domEventHandler = this.__domEventHandler.bind(this)
-      this.__render = this.__render.bind(this)
 
       props.forEach(p => {
         this.props[p] = this[p]
@@ -75,7 +81,7 @@ export default (virtualDOMPatcher, component) => {
       })
 
       this.__patch = virtualDOMPatcher(this.attachShadow({mode: 'open'}))
-      this.__store = createStore(this.__reducer.bind(this), init(this))
+      this.__store = createStore(this.__reducer, init(this))
       this.__store.dispatch({type: '@@rwc/created', params: this})
       this.__render()
       this.__dispose = this.__store.subscribe(this.__render)
