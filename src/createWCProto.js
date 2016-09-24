@@ -7,7 +7,6 @@
 'use strict'
 
 import {createStore} from './micro-redux'
-import Event from './Event'
 
 function isArray (i) {
   return i instanceof Array
@@ -26,15 +25,15 @@ function isArray (i) {
 export default (virtualDOMPatcher, component) => {
   const {update, view, init, props = []} = component
   return {
-    __dispatch (type, params) {
+    __dispatchStoreAction (type, params) {
       this.__store.dispatch({type, params})
     },
-    __dispatchActions (type, options = {}) {
+    __domEventHandler (type, options = {}) {
       if (!this.__handlers[type]) {
         this.__handlers[type] = (params) => {
           if (options.preventDefault) params.preventDefault()
           if (options.stopPropagation) params.stopPropagation()
-          this.__dispatch(type, params)
+          this.__dispatchStoreAction(type, params)
         }
       }
       return this.__handlers[type]
@@ -42,28 +41,26 @@ export default (virtualDOMPatcher, component) => {
 
     __reducer (state, action) {
       const output = update(state, action)
-      const [updatedState, event] = isArray(output) ? output : [output, null]
-      if (Event.is(event)) {
-        this.dispatchEvent(event)
-      }
+      const [updatedState, task] = isArray(output) ? output : [output, null]
+      if (task) task.run(this, this.__dispatchStoreAction)
       return updatedState
     },
 
     __render () {
       this.__patch(view(
         this.__store.getState(),
-        this.__dispatchActions
+        this.__domEventHandler
       ))
     },
 
     attributeChangedCallback (name, old, params) {
-      this.__dispatch(`@@rwc/attr/${name}`, params)
+      this.__dispatchStoreAction(`@@rwc/attr/${name}`, params)
     },
 
     createdCallback () {
       this.__handlers = {}
       this.props = {}
-      this.__dispatchActions = this.__dispatchActions.bind(this)
+      this.__domEventHandler = this.__domEventHandler.bind(this)
       this.__render = this.__render.bind(this)
 
       props.forEach(p => {
@@ -72,7 +69,7 @@ export default (virtualDOMPatcher, component) => {
           get: () => undefined,
           set: (params) => {
             this.props[p] = params
-            this.__dispatch(`@@rwc/prop/${p}`, params)
+            this.__dispatchStoreAction(`@@rwc/prop/${p}`, params)
           }
         })
       })
@@ -85,10 +82,10 @@ export default (virtualDOMPatcher, component) => {
     },
 
     attachedCallback () {
-      this.__dispatch('@@rwc/attached', this)
+      this.__dispatchStoreAction('@@rwc/attached', this)
     },
     detachedCallback () {
-      this.__dispatch('@@rwc/detached', this)
+      this.__dispatchStoreAction('@@rwc/detached', this)
       this.__dispose()
     }
   }
