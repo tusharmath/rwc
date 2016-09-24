@@ -30,6 +30,7 @@
     },
     "ghooks": {
       "pre-commit": "npm run lint",
+      "post-commit": "npm run doc",
       "commit-msg": "validate-commit-msg"
     },
     "validate-commit-msg": {
