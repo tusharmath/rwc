@@ -6,7 +6,7 @@
 
 import rwc from '../src'
 import test from 'ava'
-import {spy, stub} from 'sinon'
+import {spy} from 'sinon'
 
 function createMockPatcher () {
   const output = {
@@ -82,19 +82,18 @@ test.cb('dispatch', t => {
     }
   })
 })
-test('Event', t => {
-  const events = []
+test('Task.run()', t => {
+  const effects = []
   const mockPatcher = createMockPatcher()
-
-  function attachShadow () { return '@ROOT' }
-
-  const event = new rwc.Event()
-  const update = (state) => [state, event]
+  const attachShadow = () => '@ROOT'
+  const task = {run: spy(() => effects.push('#crazy-side-effect'))}
+  const update = (state) => [state, task]
   const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({update}))
   wc.attachShadow = attachShadow
-  wc.dispatchEvent = ev => events.push(ev)
+  wc.dispatchEvent = ev => effects.push(ev)
   wc.createdCallback()
-  t.deepEqual([event], events)
+  t.deepEqual(['#crazy-side-effect'], effects)
+  t.true(task.run.calledWith(wc, wc.__dispatchStoreAction))
 })
 test('invalid Event', t => {
   global.Event = function () {}
@@ -182,7 +181,7 @@ test('__dispatchActions({preventDefault: true})', t => {
   const wc = rwc.createWCProto(mockPatcher.patcher, component)
   wc.attachShadow = attachShadow
   wc.createdCallback()
-  wc.__dispatchActions('MOVE', {preventDefault: true})(mockEV)
+  wc.__domEventHandler('MOVE', {preventDefault: true})(mockEV)
   t.true(mockEV.preventDefault.called)
 })
 test('__dispatchActions({stopPropagation: true})', t => {
@@ -193,7 +192,7 @@ test('__dispatchActions({stopPropagation: true})', t => {
   const wc = rwc.createWCProto(mockPatcher.patcher, component)
   wc.attachShadow = attachShadow
   wc.createdCallback()
-  wc.__dispatchActions('MOVE', {stopPropagation: true})(mockEV)
+  wc.__domEventHandler('MOVE', {stopPropagation: true})(mockEV)
   t.true(mockEV.stopPropagation.called)
 })
 test('detachedCallback()', t => {
@@ -217,22 +216,21 @@ test('detachedCallback()', t => {
 test('rwc.__reducer()', t => {
   const actions = []
   const mockPatcher = createMockPatcher()
-  const mockEV = new rwc.Event('poodle')
+  const mockTask = {run: spy(() => 'poodle')}
   const update = (state, action) => {
     actions.push(action)
-    return [state, mockEV]
+    return [state, mockTask]
   }
   const component = createMockComponent({update})
   const wc = rwc.createWCProto(mockPatcher.patcher, component)
   wc.attachShadow = () => '@ROOT'
-  wc.dispatchEvent = stub()
   wc.createdCallback()
   wc.__reducer({}, {type: 'A', params: 'a'})
   t.deepEqual(actions, [
     {type: '@@rwc/created', params: wc},
     {type: 'A', params: 'a'}
   ])
-  t.true(wc.dispatchEvent.calledWith(mockEV))
+  t.true(mockTask.run.called)
 })
 test('createdCallback():copy-initial-values', t => {
   const mockPatcher = createMockPatcher()

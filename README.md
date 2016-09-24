@@ -27,12 +27,15 @@ npm install rwc --save
 
 ## Features
 
-- Small footprint (110 SLOC) with no dependencies at all (uses a bare bones version of [redux]).
+- Small footprint (97 SLOC) with no dependencies at all.
 - Reactive approach — `actions` trigger an `update` on the `state` which triggers `view` updation.
 - Can integrate with multiple virtual dom implementations like [preact] or [snabbdom] simulataneously.
 - Caches event handler between renders.
 - Passes proper JS objects to components using `props`.
-- Automatically dispatches [Event] types for inter-component communication.
+- Support for custom side-effects using `Tasks`.
+- Uses [shadow dom v1] API.
+
+[shadow dom v1]: http://hayato.io/2016/shadowdomv1/ 
 
 ## Paradigm
 
@@ -89,10 +92,8 @@ function virtualDOMPatcher (shadowRoot) {
 // create prototype object
 const proto = rwc.createWCProto(virtualDOMPatcher, CounterComponent)
 
-// create an HTMLElement instance
+// create an HTMLElement instance and extend it
 const html = Object.create(HTMLElement.prototype)
-
-// extend html element with the created prototype
 const CounterHTMLComponent = Object.assign(html, proto)
 
 // register as usual
@@ -120,7 +121,7 @@ The `virtualDOMPatcher` function argument gives the to ability to customize how 
     // create wrapper element
     let __vNode = shadowRoot.appendChild(document.createElement('div'))
     return function (vNode) {
-      __vNode = patch(h('div', [__vNode]), vNode)
+      __vNode = patch(__vNode, h('div', [vNode]))
     }
   }
   ```
@@ -158,29 +159,41 @@ The `virtualDOMPatcher` function argument gives the to ability to customize how 
   }
   ```
 
-## Component communication
-Web components communicate with the outside world using events. The component's `update()` function can return a [CustomEvent] along with the state updates for such purposes. This [CustomEvent] object is then automatically dispatched as an event which other components can easily listen to by using `addEventListener`.
+## Component Side Effects
+Web components can cause custom side-effects using Tasks. A task is a simple object which has a `run()` function. This function gets called by **RWC** with the current `component` as the first param and the `dispatch` function as the second. For instance if you want to create a `Counter` web component that dispatches a [CustomEvent] whenever the count changes you can do the following —
 
 ```js
+// Create a event dispatching task
+export class CounterChangedTask {
+  constructor (name, detail) {
+    this.detail = detail
+  }
+  run (component) {
+    const ev = new CustomEvent(this.name, {
+      detail: this.detail,
+      bubbles: true
+    })
+    component.dispatch(ev)
+  }
+}
+
 export const update = (state, {type, params}) => {
   switch (type) {
 
     case 'INC':
-      {count: state.count + 1},
+      // Return a tuple of state + task
       return [
         {count: state.count + 1},
-        new CustomEvent('changed', {detail: _state.count})
+        new CounterChangedTask('counter-changed', _state.count)
       ]
 
     case 'DEC':
       const _state = {count: state.count - 1}
       return [
         _state,
-        new CustomEvent('changed', {detail: _state.count})
+        new CounterChangedTask(_state.count)
       ]
-
     default: return state
-
   }
 }
 ```
@@ -206,7 +219,7 @@ export const update = (state, {type, params}) => {
   wc.aa = new Date()
   ```
 
-## Modifying events
+## Modifying DOM Events
 
 In certain scenarios one might want to call `preventDefault()` or `stopPropagation()` on the events that are emitted. This can be easily done by passing additional params to the `dispatch` function in the view.
 
