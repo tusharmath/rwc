@@ -95,9 +95,9 @@ test('Task.run()', t => {
   t.deepEqual(['#crazy-side-effect'], effects)
   t.true(task.run.calledWith(wc, wc.__dispatchStoreAction))
 })
-test('invalid Event', t => {
+test('invalid Task', t => {
   global.Event = function () {}
-  const events = []
+  const Tasks = []
   const mockPatcher = createMockPatcher()
 
   function attachShadow () { return '@ROOT' }
@@ -105,9 +105,9 @@ test('invalid Event', t => {
   const update = (state) => [state, null]
   const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({update}))
   wc.attachShadow = attachShadow
-  wc.dispatchEvent = ev => events.push(ev)
+  wc.dispatchEvent = ev => Tasks.push(ev)
   wc.createdCallback()
-  t.deepEqual(events, [])
+  t.deepEqual(Tasks, [])
 })
 test('init()', t => {
   const mockPatcher = createMockPatcher()

@@ -4,7 +4,7 @@
 
 'use strict'
 
-import {createStore} from '../src/micro-redux'
+import {createStore} from '../src/Store'
 import {Suite} from 'benchmark'
 
 const suite = new Suite()
