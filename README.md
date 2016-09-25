@@ -97,7 +97,7 @@ const html = Object.create(HTMLElement.prototype)
 const CounterHTMLComponent = Object.assign(html, proto)
 
 // register as usual
-document.registerElement('x-counter', {prototype: CounterHTMLComponent})
+document.registerElement('x-counter', CounterHTMLComponent)
 ```
 
 ## Virtual DOM Patcher
@@ -240,4 +240,3 @@ const view = (state, dispatch) =>
 ⭐ this repo
 
 Would greatly appreciate if you could provide feedback.
-
