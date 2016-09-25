@@ -4,11 +4,10 @@
 
 'use strict'
 
-import {createStore} from '../src/Store'
-import {Suite} from 'benchmark'
-
+const Store = require('../src/Store').default
+const {Suite} = require('benchmark')
 const suite = new Suite()
-const store = createStore(x => x, {a: 1})
+const store = Store.of(x => x, {a: 1})
 store.subscribe(x => x)
 suite
   .add('dispatch()', () => store.dispatch({type: 'LAME'}))
