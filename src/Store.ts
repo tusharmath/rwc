@@ -2,10 +2,10 @@
  * Created by tushar.mathur on 05/09/16.
  */
 
-"use strict"
-import IState from "./lib/IState";
-import IAction from "./lib/IAction";
-import IReducer from "./lib/IReducer";
+'use strict'
+import IState from './lib/IState';
+import IAction from './lib/IAction';
+import IReducer from './lib/IReducer';
 
 
 class Store {

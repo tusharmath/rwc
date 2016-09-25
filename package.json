@@ -8,6 +8,7 @@
   "scripts": {
     "prepublish": "npm run build",
     "build": "tsc",
+    "lint": "tslint ./src/*.ts ./src/**/*.ts",
     "test": "npm run build && ava",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
@@ -28,6 +29,7 @@
       "path": "./node_modules/cz-conventional-changelog"
     },
     "ghooks": {
+      "pre-commit": "npm run lint",
       "post-commit": "npm run doc",
       "commit-msg": "validate-commit-msg"
     },
@@ -63,6 +65,7 @@
     "nyc": "^8.1.0",
     "semantic-release": "^4.3.5",
     "sinon": "^1.17.6",
+    "tslint": "^3.15.1",
     "typescript": "^2.0.3",
     "validate-commit-msg": "^2.8.0"
   },

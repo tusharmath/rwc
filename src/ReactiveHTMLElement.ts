@@ -3,15 +3,15 @@
  */
 
 
-import IComponent from "./lib/IComponent";
-import IPatch from "./lib/IPatch";
-import Store from "./Store";
-import IState from "./lib/IState";
-import IAction from "./lib/IAction";
-import ITask from "./lib/ITask";
-import IVirtualNode from "./lib/IVirtualNode";
-import HTMLElement from "./lib/HTMLElement";
-import IShadowElement from "./lib/IShadowElement";
+import IComponent from './lib/IComponent';
+import IPatch from './lib/IPatch';
+import Store from './Store';
+import IState from './lib/IState';
+import IAction from './lib/IAction';
+import ITask from './lib/ITask';
+import IVirtualNode from './lib/IVirtualNode';
+import HTMLElement from './lib/HTMLElement';
+import IShadowElement from './lib/IShadowElement';
 
 interface IDispatchOptions {
   preventDefault: Boolean
@@ -31,7 +31,7 @@ function toTuple (out: IState | [IState, ITask]): [IState, ITask] {
 }
 
 function attachShadow (el: any): Node {
-  return el.attachShadow({mode: "open"})
+  return el.attachShadow({mode: 'open'})
 }
 
 class ReactiveHTMLElement extends HTMLElement implements IShadowElement {
@@ -113,17 +113,17 @@ class ReactiveHTMLElement extends HTMLElement implements IShadowElement {
 
     this.__patch = this.__virtualDOMPatcher(attachShadow(this))
     this.__store = Store.of(this.__reducer, this.__component.init(this))
-    this.__store.dispatch({type: "@@rwc/created", params: this})
+    this.__store.dispatch({type: '@@rwc/created', params: this})
     this.__render()
     this.__dispose = this.__store.subscribe(this.__render)
   }
 
   attachedCallback () {
-    this.__dispatchStoreAction("@@rwc/attached", this)
+    this.__dispatchStoreAction('@@rwc/attached', this)
   }
 
   detachedCallback () {
-    this.__dispatchStoreAction("@@rwc/detached", this)
+    this.__dispatchStoreAction('@@rwc/detached', this)
     this.__dispose()
   }
 }

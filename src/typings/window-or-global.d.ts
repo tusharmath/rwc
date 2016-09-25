@@ -3,7 +3,7 @@
  */
 
 
-declare module "window-or-global" {
+declare module 'window-or-global' {
   export class HTMLElement {
   }
 }

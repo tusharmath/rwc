@@ -235,25 +235,6 @@ const view = (state, dispatch) =>
   ])
 ```
 
-<a name="module_rwc"></a>
-
-## rwc
-<a name="module_rwc..createWCProto"></a>
-
-### rwc~createWCProto ⇒ <code>Object</code>
-Creates the prototype for the web component element.
-
-**Kind**: inner property of <code>[rwc](#module_rwc)</code>  
-**Returns**: <code>Object</code> - prototype object for creating HTMLElements  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| virtualDOMPatcher | <code>function</code> | patches the virtual dom on [shadowRoot](https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot). |
-| component | <code>Object</code> |  |
-| component.init | <code>function</code> | returns the initial state of the component. |
-| component.update | <code>function</code> | a redux reducer for updating component state. |
-| component.view | <code>function</code> | takes in the state and returns a dom tree. |
-
 
 ### Show your support
 ⭐ this repo

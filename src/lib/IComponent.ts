@@ -3,11 +3,11 @@
  */
 
 
-import IState from "./IState";
-import ITask from "./ITask";
-import IVirtualNode from "./IVirtualNode";
-import IAction from "./IAction";
-import ReactiveHTMLElement from "../ReactiveHTMLElement";
+import IState from './IState';
+import ITask from './ITask';
+import IVirtualNode from './IVirtualNode';
+import IAction from './IAction';
+import ReactiveHTMLElement from '../ReactiveHTMLElement';
 
 interface IComponent {
   props: Array<String>;
