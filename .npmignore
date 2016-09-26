@@ -1,1 +1,4 @@
 !.dist/
+perf/
+test/
+
