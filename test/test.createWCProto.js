@@ -4,10 +4,13 @@
 
 'use strict'
 
-import rwc from '../src'
 import test from 'ava'
 import {spy} from 'sinon'
+import rwc from '../.dist'
 
+/**
+ * Test Utils
+ */
 function createMockPatcher () {
   const output = {
     views: [],
@@ -42,14 +45,25 @@ function createMockComponent (params) {
     }
   }, params)
 }
+function createWebComponent (patcher, component) {
+  return Object.create(rwc.createWCProto(patcher, component))
+}
+
+/**
+ * Tests
+ */
 test.afterEach(() => delete global.Event)
-test('is function ', t => t.is(typeof rwc.createWCProto, 'function'))
+test('is an instance of ReactiveHTMLElement', t => {
+  t.true(
+    createWebComponent() instanceof rwc.ReactiveHTMLElement
+  )
+})
 test('patcher', t => {
   const mockPatcher = createMockPatcher()
 
   function attachShadow () { return '@ROOT' }
 
-  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent())
+  const wc = createWebComponent(mockPatcher.patcher, createMockComponent())
   wc.attachShadow = attachShadow
   wc.createdCallback()
   t.is(mockPatcher.root, '@ROOT')
@@ -66,7 +80,7 @@ test.cb('dispatch', t => {
       return `<div>${count}</div>`
     }
   })
-  const wc = rwc.createWCProto(mockPatcher.patcher, component)
+  const wc = createWebComponent(mockPatcher.patcher, component)
   wc.attachShadow = attachShadow
   wc.createdCallback()
   wc.__store.subscribe(x => {
@@ -88,7 +102,7 @@ test('Task.run()', t => {
   const attachShadow = () => '@ROOT'
   const task = {run: spy(() => effects.push('#crazy-side-effect'))}
   const update = (state) => [state, task]
-  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({update}))
+  const wc = createWebComponent(mockPatcher.patcher, createMockComponent({update}))
   wc.attachShadow = attachShadow
   wc.dispatchEvent = ev => effects.push(ev)
   wc.createdCallback()
@@ -103,7 +117,7 @@ test('invalid Task', t => {
   function attachShadow () { return '@ROOT' }
 
   const update = (state) => [state, null]
-  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({update}))
+  const wc = createWebComponent(mockPatcher.patcher, createMockComponent({update}))
   wc.attachShadow = attachShadow
   wc.dispatchEvent = ev => Tasks.push(ev)
   wc.createdCallback()
@@ -113,7 +127,7 @@ test('init()', t => {
   const mockPatcher = createMockPatcher()
   const attachShadow = () => '@ROOT'
   const init = spy(x => ({count: 0}))
-  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({init}))
+  const wc = createWebComponent(mockPatcher.patcher, createMockComponent({init}))
   wc.attachShadow = attachShadow
   wc.createdCallback()
   t.true(init.calledWith(wc))
@@ -126,7 +140,7 @@ test('memoize handler', t => {
     dispatch = _dispatch
     return `<div>${count}</div>`
   }
-  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({view}))
+  const wc = createWebComponent(mockPatcher.patcher, createMockComponent({view}))
   wc.attachShadow = attachShadow
   wc.createdCallback()
   t.is(dispatch('XYZ'), dispatch('XYZ'))
@@ -134,7 +148,7 @@ test('memoize handler', t => {
 test('attachShadow()', t => {
   const mockPatcher = createMockPatcher()
   const attachShadow = spy(() => '@ROOT')
-  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent())
+  const wc = createWebComponent(mockPatcher.patcher, createMockComponent())
   wc.attachShadow = attachShadow
   wc.createdCallback()
   t.deepEqual(attachShadow.args, [[{mode: 'open'}]])
@@ -144,7 +158,7 @@ test('attachedCallback()', t => {
   const mockPatcher = createMockPatcher()
   const attachShadow = spy(() => '@ROOT')
   const update = (s, a) => actions.push(a)
-  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({update}))
+  const wc = createWebComponent(mockPatcher.patcher, createMockComponent({update}))
   wc.attachShadow = attachShadow
   wc.createdCallback()
   wc.attachedCallback()
@@ -159,7 +173,7 @@ test('setProps', t => {
   const mockPatcher = createMockPatcher()
   const attachShadow = spy(() => '@ROOT')
   const update = (s, a) => actions.push(a)
-  const wc = rwc.createWCProto(mockPatcher.patcher, createMockComponent({update}))
+  const wc = createWebComponent(mockPatcher.patcher, createMockComponent({update}))
   wc.attachShadow = attachShadow
   wc.createdCallback()
   wc.attachedCallback()
@@ -178,7 +192,7 @@ test('__dispatchActions({preventDefault: true})', t => {
   const mockEV = {preventDefault: spy()}
   const attachShadow = () => '@ROOT'
   const component = createMockComponent()
-  const wc = rwc.createWCProto(mockPatcher.patcher, component)
+  const wc = createWebComponent(mockPatcher.patcher, component)
   wc.attachShadow = attachShadow
   wc.createdCallback()
   wc.__domEventHandler('MOVE', {preventDefault: true})(mockEV)
@@ -189,7 +203,7 @@ test('__dispatchActions({stopPropagation: true})', t => {
   const mockEV = {stopPropagation: spy()}
   const attachShadow = () => '@ROOT'
   const component = createMockComponent()
-  const wc = rwc.createWCProto(mockPatcher.patcher, component)
+  const wc = createWebComponent(mockPatcher.patcher, component)
   wc.attachShadow = attachShadow
   wc.createdCallback()
   wc.__domEventHandler('MOVE', {stopPropagation: true})(mockEV)
@@ -204,7 +218,7 @@ test('detachedCallback()', t => {
     return state
   }
   const component = createMockComponent({update})
-  const wc = rwc.createWCProto(mockPatcher.patcher, component)
+  const wc = createWebComponent(mockPatcher.patcher, component)
   wc.attachShadow = attachShadow
   wc.createdCallback()
   wc.detachedCallback()
@@ -222,7 +236,7 @@ test('rwc.__reducer()', t => {
     return [state, mockTask]
   }
   const component = createMockComponent({update})
-  const wc = rwc.createWCProto(mockPatcher.patcher, component)
+  const wc = createWebComponent(mockPatcher.patcher, component)
   wc.attachShadow = () => '@ROOT'
   wc.createdCallback()
   wc.__reducer({}, {type: 'A', params: 'a'})
@@ -236,7 +250,7 @@ test('createdCallback():copy-initial-values', t => {
   const mockPatcher = createMockPatcher()
   const attachShadow = () => '@ROOT'
   const component = createMockComponent()
-  const wc = rwc.createWCProto(mockPatcher.patcher, component)
+  const wc = createWebComponent(mockPatcher.patcher, component)
   wc.attachShadow = attachShadow
   wc['A'] = 'aaa-initial-value'
   wc['B'] = 'bbb-initial-value'

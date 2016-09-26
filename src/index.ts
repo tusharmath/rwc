@@ -10,4 +10,4 @@ function createWCProto (patcher: IPatch, component: IComponent) {
   return ReactiveHTMLElement.of(patcher, component)
 }
 
-export default {createWCProto}
+export default {createWCProto, ReactiveHTMLElement}
