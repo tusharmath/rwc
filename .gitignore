@@ -9,5 +9,3 @@ node_modules/
 .nyc*
 .dist/
 .vscode/
-src/**/*.js
-src/**/*.map

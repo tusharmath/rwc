@@ -6,7 +6,9 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "outDir": "./.dist",
+    "declaration": true
   },
   "formatCodeOptions": {
     "indentSize": 2,
