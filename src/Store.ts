@@ -3,12 +3,12 @@
  */
 
 'use strict'
-import IState from './lib/IState';
-import IAction from './lib/IAction';
-import IReducer from './lib/IReducer';
+import {IState} from './lib/IState';
+import {IAction} from './lib/IAction';
+import {IReducer} from './lib/IReducer';
 
 
-class Store {
+export class Store {
   private __reducer: IReducer
   private __state: IState
   private __listeners: Array<Function>
@@ -44,5 +44,3 @@ class Store {
     return new Store(reducer, state)
   }
 }
-
-export default Store

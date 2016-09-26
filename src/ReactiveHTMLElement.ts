@@ -3,15 +3,15 @@
  */
 
 
-import IComponent from './lib/IComponent';
-import IPatch from './lib/IPatch';
-import Store from './Store';
-import IState from './lib/IState';
-import IAction from './lib/IAction';
-import ITask from './lib/ITask';
-import IVirtualNode from './lib/IVirtualNode';
-import HTMLElement from './lib/HTMLElement';
-import IShadowElement from './lib/IShadowElement';
+import {IComponent} from './lib/IComponent';
+import {IPatch} from './lib/IPatch';
+import {Store} from './Store';
+import {IState} from './lib/IState';
+import {IAction} from './lib/IAction';
+import {ITask} from './lib/ITask';
+import {IVirtualNode} from './lib/IVirtualNode';
+import {HTMLElement} from './lib/HTMLElement';
+import {IShadowElement} from './lib/IShadowElement';
 
 interface IDispatchOptions {
   preventDefault: Boolean
@@ -34,7 +34,7 @@ function attachShadow (el: any): Node {
   return el.attachShadow({mode: 'open'})
 }
 
-class ReactiveHTMLElement extends HTMLElement implements IShadowElement {
+export class ReactiveHTMLElement extends HTMLElement implements IShadowElement {
   private __dispose: Function
   private props: any
   private __virtualDOMPatcher: IPatch
@@ -127,5 +127,3 @@ class ReactiveHTMLElement extends HTMLElement implements IShadowElement {
     this.__dispose()
   }
 }
-
-export default ReactiveHTMLElement;

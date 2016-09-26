@@ -3,17 +3,15 @@
  */
 
 
-import IState from './IState';
-import ITask from './ITask';
-import IVirtualNode from './IVirtualNode';
-import IAction from './IAction';
-import ReactiveHTMLElement from '../ReactiveHTMLElement';
+import {IState} from './IState';
+import {ITask} from './ITask';
+import {IVirtualNode} from './IVirtualNode';
+import {IAction} from './IAction';
+import {IShadowElement} from './IShadowElement';
 
-interface IComponent {
+export interface IComponent {
   props: Array<String>;
-  init (el: ReactiveHTMLElement): IState;
+  init (el: IShadowElement): IState;
   update (state: IState, action: IAction): IState | [IState, ITask];
   view (state: IState, dispatch: Function): IVirtualNode;
 }
-
-export default IComponent;

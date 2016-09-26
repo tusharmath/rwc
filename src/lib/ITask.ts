@@ -2,10 +2,8 @@
  * Created by tushar.mathur on 25/09/16.
  */
 
-import ReactiveHTMLElement from '../ReactiveHTMLElement';
+import {IShadowElement} from './IShadowElement';
 
-interface ITask {
-  run (el: ReactiveHTMLElement, dispatch: Function): void
+export interface ITask {
+  run (el: IShadowElement, dispatch: Function): void
 }
-
-export default ITask

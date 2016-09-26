@@ -2,10 +2,8 @@
  * Created by tushar.mathur on 25/09/16.
  */
 
-import IVirtualNode from './IVirtualNode';
+import {IVirtualNode} from './IVirtualNode';
 
-interface IPatch {
+export interface IPatch {
   (el: Node): (vNode: IVirtualNode) => void
 }
-
-export default IPatch
