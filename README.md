@@ -86,18 +86,15 @@ import rwc from 'rwc'
 import CounterComponent from './CounterComponent'
 
 function virtualDOMPatcher (shadowRoot) {
-  return (vnode) => /* patches the shadowRoot with vNode */
+  return (vnode) => {/* patches the shadowRoot with vNode */}
 }
 
 // create prototype object
-const proto = rwc.createWCProto(virtualDOMPatcher, CounterComponent)
+const ReactiveProto = rwc.createWCProto(virtualDOMPatcher, CounterComponent)
 
-// create an HTMLElement instance and extend it
-const html = Object.create(HTMLElement.prototype)
-const CounterHTMLComponent = Object.assign(html, proto)
 
 // register as usual
-document.registerElement('x-counter', CounterHTMLComponent)
+document.registerElement('x-counter', {prototype: ReactiveProto})
 ```
 
 ## Virtual DOM Patcher
