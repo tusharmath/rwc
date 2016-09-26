@@ -27,7 +27,7 @@ npm install rwc --save
 
 ## Features
 
-- Small footprint (97 SLOC) with no dependencies at all.
+- Small footprint (~100 SLOC) with no dependencies at all.
 - Reactive approach — `actions` trigger an `update` on the `state` which triggers `view` updation.
 - Can integrate with multiple virtual dom implementations like [preact] or [snabbdom] simulataneously.
 - Caches event handler between renders.
@@ -156,14 +156,16 @@ The `virtualDOMPatcher` function argument gives the to ability to customize how 
   }
   ```
 
-## Component Side Effects
-Web components can cause custom side-effects using Tasks. A task is a simple object which has a `run()` function. This function gets called by **RWC** with the current `component` as the first param and the `dispatch` function as the second. For instance if you want to create a `Counter` web component that dispatches a [CustomEvent] whenever the count changes you can do the following —
+## RWC Tasks
+Web components can have custom side-effects using Tasks. A task is a simple object which has a `run()` function. This function gets called by **RWC** with the current `component` as the first param and the `dispatch` function as the second. Tasks have to be created inside the `update()` function and returned as a part of the tuple's second value as shown below.
+For instance a counter web component might want to dispatch an event whenever the counter changes. This can be done by creating an event dispatching task.
 
 ```js
 // Create a event dispatching task
-export class CounterChangedTask {
+export class DispatchEventTask {
   constructor (name, detail) {
     this.detail = detail
+    this.name = name
   }
   run (component) {
     const ev = new CustomEvent(this.name, {
@@ -181,14 +183,14 @@ export const update = (state, {type, params}) => {
       // Return a tuple of state + task
       return [
         {count: state.count + 1},
-        new CounterChangedTask('counter-changed', _state.count)
+        new DispatchEventTask('count-changed', _state.count)
       ]
 
     case 'DEC':
       const _state = {count: state.count - 1}
       return [
         _state,
-        new CounterChangedTask(_state.count)
+        new DispatchEventTask('count-changed', _state.count)
       ]
     default: return state
   }
@@ -216,7 +218,9 @@ export const update = (state, {type, params}) => {
   wc.aa = new Date()
   ```
 
-## Modifying DOM Events
+## Mutating DOM Events
+
+**Might get deprecated in favour of tasks**
 
 In certain scenarios one might want to call `preventDefault()` or `stopPropagation()` on the events that are emitted. This can be easily done by passing additional params to the `dispatch` function in the view.
 
