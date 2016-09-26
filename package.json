@@ -21,7 +21,7 @@
   "engines": {
     "node": ">= 6.0.0"
   },
-  "main": "./src/index.js",
+  "main": "./.dist/index.js",
   "license": "MIT",
   "config": {
     "commitizen": {
