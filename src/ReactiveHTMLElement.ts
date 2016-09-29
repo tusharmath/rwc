@@ -10,7 +10,6 @@ import {IState} from './lib/IState';
 import {IAction} from './lib/IAction';
 import {ITask} from './lib/ITask';
 import {IVirtualNode} from './lib/IVirtualNode';
-import {HTMLElement} from './lib/HTMLElement';
 import {IShadowElement} from './lib/IShadowElement';
 
 interface IDispatchOptions {
@@ -34,11 +33,9 @@ function attachShadow (el: any): Node {
   return el.attachShadow({mode: 'open'})
 }
 
-export class ReactiveHTMLElement extends HTMLElement implements IShadowElement {
+export class ReactiveHTMLElement implements IShadowElement {
   private __dispose: Function
   private props: any
-  private __virtualDOMPatcher: IPatch
-  private __component: IComponent
   private __store: Store
   private __handlers: any
   private __patch: (vNode: IVirtualNode) => void
@@ -48,10 +45,8 @@ export class ReactiveHTMLElement extends HTMLElement implements IShadowElement {
   }
 
 
-  constructor (virtualDOMPatcher: IPatch, component: IComponent) {
-    super()
-    this.__virtualDOMPatcher = virtualDOMPatcher
-    this.__component = component
+  constructor (private __virtualDOMPatcher: IPatch,
+               private __component: IComponent) {
   }
 
   private __dispatchStoreAction (type: String, params: any) {
@@ -100,16 +95,18 @@ export class ReactiveHTMLElement extends HTMLElement implements IShadowElement {
 
     this.__handlers = {}
     this.props = {}
-    this.__component.props.forEach((p: string) => {
-      this.props[p] = this[p]
-      Object.defineProperty(this, p, {
-        get: () => undefined,
-        set: (params) => {
-          this.props[p] = params
-          this.__dispatchStoreAction(`@@rwc/prop/${p}`, params)
-        }
+    if (this.__component.props) {
+      this.__component.props.forEach((p: string) => {
+        this.props[p] = this[p]
+        Object.defineProperty(this, p, {
+          get: () => undefined,
+          set: (params) => {
+            this.props[p] = params
+            this.__dispatchStoreAction(`@@rwc/prop/${p}`, params)
+          }
+        })
       })
-    })
+    }
 
     this.__patch = this.__virtualDOMPatcher(attachShadow(this))
     this.__store = Store.of(this.__reducer, this.__component.init(this))
