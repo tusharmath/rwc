@@ -95,16 +95,18 @@ export class ReactiveHTMLElement implements IShadowElement {
 
     this.__handlers = {}
     this.props = {}
-    this.__component.props.forEach((p: string) => {
-      this.props[p] = this[p]
-      Object.defineProperty(this, p, {
-        get: () => undefined,
-        set: (params) => {
-          this.props[p] = params
-          this.__dispatchStoreAction(`@@rwc/prop/${p}`, params)
-        }
+    if (this.__component.props) {
+      this.__component.props.forEach((p: string) => {
+        this.props[p] = this[p]
+        Object.defineProperty(this, p, {
+          get: () => undefined,
+          set: (params) => {
+            this.props[p] = params
+            this.__dispatchStoreAction(`@@rwc/prop/${p}`, params)
+          }
+        })
       })
-    })
+    }
 
     this.__patch = this.__virtualDOMPatcher(attachShadow(this))
     this.__store = Store.of(this.__reducer, this.__component.init(this))

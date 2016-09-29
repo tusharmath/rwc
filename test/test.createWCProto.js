@@ -262,3 +262,10 @@ test('createdCallback():copy-initial-values', t => {
   t.is(wc.props['B'], 'bbb-initial-value')
   t.is(wc['C'], 'ccc-initial-value')
 })
+test('no-props', t => {
+  const mockPatcher = createMockPatcher()
+  const attachShadow = () => '@ROOT'
+  const wc = createWebComponent(mockPatcher.patcher, createMockComponent({props: null}))
+  wc.attachShadow = attachShadow
+  wc.createdCallback()
+})
