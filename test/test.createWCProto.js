@@ -55,7 +55,6 @@ function createWebComponent (patcher, component) {
  */
 test.afterEach(() => delete global.Event)
 test('is an instance of ReactiveHTMLElement', t => {
-  t.true(createWebComponent() instanceof rwc.ReactiveHTMLElement)
   t.true(createWebComponent() instanceof HTMLElement)
   t.true(typeof createWebComponent()['createdCallback'] === 'function')
   t.true(typeof createWebComponent()['attributeChangedCallback'] === 'function')
