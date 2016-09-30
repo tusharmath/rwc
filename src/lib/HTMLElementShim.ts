@@ -3,4 +3,7 @@
  */
 
 export class HTMLElementShim {
+  constructor () {
+    throw TypeError('Shame, can not call constructor')
+  }
 }

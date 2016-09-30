@@ -10,8 +10,9 @@ import {IState} from './lib/IState';
 import {IAction} from './lib/IAction';
 import {ITask} from './lib/ITask';
 import {IVirtualNode} from './lib/IVirtualNode';
-import {HTMLElement} from './lib/HTMLElement';
 import {IShadowElement} from './lib/IShadowElement';
+import {HTMLElement} from './lib/HTMLElement';
+import {assignOwnProperties} from './lib/assignOwnProperties';
 
 interface IDispatchOptions {
   preventDefault: Boolean
@@ -34,7 +35,7 @@ function attachShadow (el: any): Node {
   return el.attachShadow({mode: 'open'})
 }
 
-export class ReactiveHTMLElement extends HTMLElement implements IShadowElement {
+export class ReactiveHTMLElement implements IShadowElement {
   private __dispose: Function
   private props: any
   private __virtualDOMPatcher: IPatch
@@ -43,16 +44,21 @@ export class ReactiveHTMLElement extends HTMLElement implements IShadowElement {
   private __handlers: any
   private __patch: (vNode: IVirtualNode) => void
 
-  static of (virtualDOMPatcher: IPatch, component: IComponent) {
-    return new ReactiveHTMLElement(virtualDOMPatcher, component)
+  static of (virtualDOMPatcher: IPatch, component: IComponent): ReactiveHTMLElement {
+    const htmlEL = Object.create(HTMLElement.prototype)
+    const reactEL = <ReactiveHTMLElement> Object.create(
+      assignOwnProperties(htmlEL, ReactiveHTMLElement.prototype)
+    )
+    return reactEL.setup(virtualDOMPatcher, component)
   }
 
 
-  constructor (virtualDOMPatcher: IPatch, component: IComponent) {
-    super()
+  setup (virtualDOMPatcher: IPatch, component: IComponent): ReactiveHTMLElement {
     this.__virtualDOMPatcher = virtualDOMPatcher
     this.__component = component
+    return this
   }
+
 
   private __dispatchStoreAction (type: String, params: any) {
     this.__store.dispatch({type, params})
