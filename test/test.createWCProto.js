@@ -6,8 +6,8 @@
 
 import test from 'ava'
 import {spy} from 'sinon'
-import rwc from '../.dist'
-import {HTMLElement} from '../.dist/lib/HTMLElement'
+import rwc from '../src'
+import {HTMLElement} from '../src/lib/HTMLElement'
 
 /**
  * Test Utils

@@ -7,7 +7,6 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "suppressImplicitAnyIndexErrors": true,
-    "outDir": "./.dist",
     "declaration": true
   },
   "formatCodeOptions": {
