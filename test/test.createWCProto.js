@@ -6,7 +6,8 @@
 
 import test from 'ava'
 import {spy} from 'sinon'
-import rwc from '../.dist'
+import rwc from '../src'
+import {HTMLElement} from '../src/lib/HTMLElement'
 
 /**
  * Test Utils
@@ -54,9 +55,11 @@ function createWebComponent (patcher, component) {
  */
 test.afterEach(() => delete global.Event)
 test('is an instance of ReactiveHTMLElement', t => {
-  t.true(
-    createWebComponent() instanceof rwc.ReactiveHTMLElement
-  )
+  t.true(createWebComponent() instanceof HTMLElement)
+  t.true(typeof createWebComponent()['createdCallback'] === 'function')
+  t.true(typeof createWebComponent()['attributeChangedCallback'] === 'function')
+  t.true(typeof createWebComponent()['attachedCallback'] === 'function')
+  t.true(typeof createWebComponent()['detachedCallback'] === 'function')
 })
 test('patcher', t => {
   const mockPatcher = createMockPatcher()
