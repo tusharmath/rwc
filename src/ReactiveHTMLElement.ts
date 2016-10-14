@@ -3,31 +3,37 @@
  */
 
 
-import {IComponent} from './lib/IComponent';
-import {IPatch} from './lib/IPatch';
-import {Store} from './Store';
-import {IState} from './lib/IState';
-import {IAction} from './lib/IAction';
-import {ITask} from './lib/ITask';
-import {IVirtualNode} from './lib/IVirtualNode';
-import {IShadowElement} from './lib/IShadowElement';
-import {HTMLElement} from './lib/HTMLElement';
-import {assignOwnProperties} from './lib/assignOwnProperties';
+import {IComponent} from './lib/IComponent'
+import {IPatch} from './lib/IPatch'
+import {Store} from './Store'
+import {IState} from './lib/IState'
+import {IAction} from './lib/IAction'
+import {ITask} from './lib/ITask'
+import {IVirtualNode} from './lib/IVirtualNode'
+import {IShadowElement} from './lib/IShadowElement'
+import {HTMLElement} from './lib/HTMLElement'
+import {assignOwnProperties} from './lib/assignOwnProperties'
 
 interface IDispatchOptions {
   preventDefault: Boolean
   stopPropagation: Boolean
 }
 
-class NoEffect implements ITask {
+export class NoEffect implements ITask {
   run () {
   }
 }
 
-function toTuple (out: IState | [IState, ITask]): [IState, ITask] {
-  if (out instanceof Array && out[1] && out[1].run) {
-    return out
+export function toTuple (out: IState | [IState, ITask]): [IState, ITask] {
+  if (out instanceof Array) {
+    const outArr = out as [IState, ITask]
+    if (out[1] && out[1].run) {
+      return outArr
+    } else {
+      return [out[0], new NoEffect()]
+    }
   }
+
   return [out, new NoEffect()]
 }
 

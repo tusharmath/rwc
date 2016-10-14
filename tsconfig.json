@@ -7,7 +7,7 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "suppressImplicitAnyIndexErrors": true,
-    "declaration": true
+    "declaration": false
   },
   "formatCodeOptions": {
     "indentSize": 2,
