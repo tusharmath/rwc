@@ -7,6 +7,7 @@
 import test from 'ava'
 import {spy} from 'sinon'
 import rwc from '../src'
+import {NoEffect, toTuple} from '../src/ReactiveHTMLElement'
 import {HTMLElement} from '../src/lib/HTMLElement'
 
 /**
@@ -271,4 +272,10 @@ test('no-props', t => {
   const wc = createWebComponent(mockPatcher.patcher, createMockComponent({props: null}))
   wc.attachShadow = attachShadow
   wc.createdCallback()
+})
+test('toTuple()', t => {
+  const state = {a: 1}
+  t.deepEqual(toTuple([state, null]), [{a: 1}, new NoEffect()])
+  t.deepEqual(toTuple(state), [{a: 1}, new NoEffect()])
+  t.deepEqual(toTuple([state, {}]), [{a: 1}, new NoEffect()])
 })
