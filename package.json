@@ -54,7 +54,7 @@
     "shadow-dom"
   ],
   "devDependencies": {
-    "ava": "^0.16.0",
+    "ava": "^0.17.0",
     "benchmark": "^2.1.1",
     "coveralls": "^2.11.12",
     "cz-conventional-changelog": "^1.2.0",
