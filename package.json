@@ -62,7 +62,7 @@
     "nyc": "^8.1.0",
     "semantic-release": "^4.3.5",
     "sinon": "^1.17.6",
-    "tslint": "^3.15.1",
+    "tslint": "^4.1.1",
     "typescript": "^2.0.3",
     "validate-commit-msg": "^2.8.0"
   },
