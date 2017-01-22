@@ -1,7 +1,6 @@
 # rwc (BETA)
 [![Build Status](https://travis-ci.org/tusharmath/rwc.svg?branch=master)](https://travis-ci.org/tusharmath/rwc)
 [![npm](https://img.shields.io/npm/v/rwc.svg)](https://www.npmjs.com/package/rwc)
-[![Coverage Status](https://coveralls.io/repos/github/tusharmath/rwc/badge.svg)](https://coveralls.io/github/tusharmath/rwc)
 
 RWC is a unique mix of [Shadow DOM] + [Virtual DOM] + [Redux] to create [web-components].
 This approach is an attempt to find a balance between a [scalable paradigm] and performance.
