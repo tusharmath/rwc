@@ -65,8 +65,5 @@
     "tslint": "^3.15.1",
     "typescript": "^2.0.3",
     "validate-commit-msg": "^2.8.0"
-  },
-  "dependencies": {
-    "window-or-global": "^1.0.1"
   }
 }

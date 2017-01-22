@@ -3,17 +3,12 @@
     "module": "commonjs",
     "target": "es6",
     "noImplicitAny": true,
-    "removeComments": true,
-    "preserveConstEnums": true,
     "sourceMap": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "declaration": false
+    "declaration": false,
+    "strictNullChecks": true
   },
   "formatCodeOptions": {
     "indentSize": 2,
     "tabSize": 2
-  },
-  "exclude": [
-    "node_modules/**"
-  ]
+  }
 }
