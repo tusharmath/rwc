@@ -8,6 +8,8 @@ notifications:
 node_js:
   - 'stable'
 before_install:
+  - npm i -g typings
+  - typings install
   - npm i -g npm@^2.0.0
 before_script:
   - npm prune
