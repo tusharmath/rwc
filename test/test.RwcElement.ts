@@ -52,8 +52,19 @@ it('internal events', () => {
   e.disconnectedCallback()
   assert.deepEqual(e.actions, [
     Action.of('@rwc/connect', e),
-    Action.of('@rwc/attr', {oldValue: 'AA', newValue: 'BB', name: 'href'}),
+    Action.of('@rwc/attr/href', {oldValue: 'AA', newValue: 'BB'}),
     Action.of('@rwc/adopt', {oldDocument: 'DOC0', newDocument: 'DOC1'}),
     Action.of('@rwc/disconnect', e)
+  ])
+})
+
+
+it('set data()', () => {
+  const e = new TestElement()
+  e.data = {x: 1000}
+  e.data = {x: 2000}
+  assert.deepEqual(e.actions, [
+    Action.of('@rwc/data', {x: 1000}),
+    Action.of('@rwc/data', {x: 2000})
   ])
 })

@@ -10,6 +10,14 @@ export abstract class RwcElement<T> extends HTMLElement implements CustomElement
   private state = this.init()
   private patchEL: Element
 
+  constructor () {
+    super()
+  }
+
+  set data (value: any) {
+    this.emitter.of('@rwc/data').emit(value)
+  }
+
   connectedCallback (): void {
     this.emitter.of('@rwc/connect').emit(this)
   }
@@ -19,7 +27,7 @@ export abstract class RwcElement<T> extends HTMLElement implements CustomElement
   }
 
   attributeChangedCallback (attributeName: string, oldValue: string, newValue: string, namespace: string): void {
-    this.emitter.of('@rwc/attr').emit({oldValue, newValue, name: attributeName})
+    this.emitter.of('@rwc/attr/' + attributeName).emit({oldValue, newValue})
   }
 
   adoptedCallback (oldDocument: DocumentFragment, newDocument: DocumentFragment): void {
