@@ -3,4 +3,4 @@
  */
 
 export {RwcElement} from './src/RwcElement'
-export {C} from './src/commands/index'
+export * from './src/Commands'

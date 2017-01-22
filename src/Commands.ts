@@ -11,4 +11,10 @@ class CustomEventCommand<T> implements Command {
   }
 }
 
+class NoneCommand implements Command {
+  run (e: Emitter, ce: HTMLElement): void {
+  }
+}
+
 export const event = <T> (type: string, detail: T) => new CustomEventCommand(type, detail)
+export const noop = new NoneCommand()
