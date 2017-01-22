@@ -17,4 +17,4 @@ class NoneCommand implements Command {
 }
 
 export const event = <T> (type: string, detail: T) => new CustomEventCommand(type, detail)
-export const noop = new NoneCommand()
+export const noop = () => new NoneCommand()

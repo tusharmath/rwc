@@ -5,34 +5,28 @@ import {hoe, Action} from 'hoe'
 import {render, VNode} from 'preact'
 
 export abstract class RwcElement<T> extends HTMLElement implements CustomElement {
-  private emitter = hoe(this.onAction, {cache: true})
+  private emitter = hoe(this.onAction.bind(this), {cache: true})
   private shadowEL = this.attachShadow({mode: 'open'})
   private state = this.init()
   private patchEL: Element
 
   connectedCallback (): void {
-    this.emitter.of('@rwc').of('connect').emit(this)
+    this.emitter.of('@rwc/connect').emit(this)
   }
 
   disconnectedCallback (): void {
-    this.emitter.of('@rwc').of('disconnect').emit(this)
+    this.emitter.of('@rwc/disconnect').emit(this)
   }
 
   attributeChangedCallback (attributeName: string, oldValue: string, newValue: string, namespace: string): void {
-    this.emitter
-      .of('@rwc')
-      .of('attr')
-      .of(attributeName).emit({oldValue, newValue})
+    this.emitter.of('@rwc/attr').emit({oldValue, newValue, name: attributeName})
   }
 
   adoptedCallback (oldDocument: DocumentFragment, newDocument: DocumentFragment): void {
-    this.emitter
-      .of('@rwc')
-      .of('adopt')
-      .emit({oldDocument, newDocument})
+    this.emitter.of('@rwc/adopt').emit({oldDocument, newDocument})
   }
 
-  private onAction (action: Action<any>) {
+  protected onAction (action: Action<any>) {
 
     // get new state
     const state = this.update(action, this.state)

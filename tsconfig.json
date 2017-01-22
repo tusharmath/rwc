@@ -6,9 +6,5 @@
     "sourceMap": true,
     "declaration": false,
     "strictNullChecks": true
-  },
-  "formatCodeOptions": {
-    "indentSize": 2,
-    "tabSize": 2
   }
 }

@@ -12,3 +12,4 @@ node_modules/
 src/**/*.d.ts
 *.js
 *.js.map
+typings/
