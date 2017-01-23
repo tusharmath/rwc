@@ -33,7 +33,7 @@ export class TestElement extends RwcElement<any> {
     return noop()
   }
 
-  protected onAction (action: Action<any>) {
+  onAction (action: Action<any>) {
     this.actions.push(action)
   }
 }

@@ -4,3 +4,4 @@
 
 export * from './src/RwcElement'
 export * from './src/Commands'
+export * from 'hoe'
