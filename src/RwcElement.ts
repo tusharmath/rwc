@@ -1,10 +1,11 @@
 /**
  * Created by tushar on 22/01/17.
  */
+///<reference path="../global.d.ts"/>
 import {hoe, Action} from 'hoe'
 
 export abstract class RwcElement<T> extends HTMLElement implements CustomElement {
-  private emitter = hoe(this.onAction.bind(this), {cache: true})
+  protected emitter = hoe(this.onAction.bind(this), {cache: true})
 
   set data (value: any) {
     this.emitter.of('@rwc/data').emit(value)
