@@ -1,0 +1,6 @@
+{
+  "globalDependencies": {
+    "mocha": "registry:dt/mocha#2.2.5+20170118061455",
+    "node": "registry:dt/node#7.0.0+20170121225502"
+  }
+}

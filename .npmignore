@@ -1,4 +1,4 @@
 !.dist/
 perf/
 test/
-
+!*.d.ts

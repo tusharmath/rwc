@@ -9,6 +9,8 @@ node_modules/
 .nyc*
 .dist/
 .vscode/
-src/**/*.js
-src/**/*.d.ts
-src/**/*.map
+*.d.ts
+*.js
+*.js.map
+typings/
+!global.d.ts
