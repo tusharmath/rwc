@@ -1,18 +1,11 @@
 /**
  * Created by tushar on 22/01/17.
  */
+///<reference path="../global.d.ts"/>
 import {hoe, Action} from 'hoe'
-import {render, VNode} from 'preact'
 
 export abstract class RwcElement<T> extends HTMLElement implements CustomElement {
-  private emitter = hoe(this.onAction.bind(this), {cache: true})
-  private shadowEL = this.attachShadow({mode: 'open'})
-  private state = this.init()
-  private patchEL: Element
-
-  constructor () {
-    super()
-  }
+  protected emitter = hoe(this.onAction.bind(this), {cache: true})
 
   set data (value: any) {
     this.emitter.of('@rwc/data').emit(value)
@@ -34,32 +27,13 @@ export abstract class RwcElement<T> extends HTMLElement implements CustomElement
     this.emitter.of('@rwc/adopt').emit({oldDocument, newDocument})
   }
 
-  protected onAction (action: Action<any>) {
-
-    // get new state
-    const state = this.update(action, this.state)
-
-    // get command
-    const command = this.command(action, this.state)
-
-    // get the view
-    const view = this.view(this.emitter, this.state)
-
-    // update state
-    this.state = state
-
-    // patch the dom
-    this.patchEL = render(view, this.shadowEL as any, this.patchEL)
-
-    // run commands
-    command.run(this.emitter, this)
-  }
+  abstract onAction (action: Action<any>): void
 
   abstract init (): T
 
   abstract update (a: Action<any>, s: T): T
 
-  abstract view (e: Emitter, s: T): VNode
+  abstract view <V> (e: Emitter, s: T): V
 
   abstract command (a: Action<any>, s: T): Command
 }
