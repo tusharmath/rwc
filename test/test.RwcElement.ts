@@ -2,7 +2,6 @@
  * Created by tushar on 22/01/17.
  */
 import * as assert from 'assert'
-import {h} from 'preact'
 import {RwcElement, noop} from '../index'
 import {Action} from 'hoe'
 
@@ -26,7 +25,7 @@ export class TestElement extends RwcElement<any> {
   }
 
   view (e: Emitter, s: number) {
-    return h('div', {}, 'AAA')
+    return 'AAA'
   }
 
   command (a: Action<any>, s: number): Command {
