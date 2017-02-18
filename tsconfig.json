@@ -4,7 +4,8 @@
     "target": "es6",
     "noImplicitAny": true,
     "sourceMap": true,
-    "declaration": true,
-    "strictNullChecks": true
+    "declaration": false,
+    "strictNullChecks": true,
+    "noUnusedLocals": true
   }
 }
