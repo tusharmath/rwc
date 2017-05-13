@@ -3,7 +3,7 @@
  */
 
 export const event = <T> (type: string, detail: T): Command => ({
-  run (e: Emitter, ce: HTMLElement): void {
+  run (e: Hoe, ce: HTMLElement): void {
     ce.dispatchEvent(new CustomEvent(type, detail))
   }
 })
