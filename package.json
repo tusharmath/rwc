@@ -6,8 +6,7 @@
     "url": "http://tusharm.com"
   },
   "scripts": {
-    "prepublish": "npm run build",
-    "build": "tsc",
+    "prepublish": "tsc -d",
     "lint": "tslint ./src/*.ts ./src/**/*.ts",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "test": "tsc && mocha -r src/TestSetup.js",
