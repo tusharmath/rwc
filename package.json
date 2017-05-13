@@ -10,7 +10,8 @@
     "build": "tsc",
     "lint": "tslint ./src/*.ts ./src/**/*.ts",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "test": "tsc && mocha -r src/TestSetup.js"
+    "test": "tsc && mocha -r src/TestSetup.js",
+    "test:watch": "tsc && mocha -r src/TestSetup.js -w"
   },
   "repository": {
     "type": "git",
