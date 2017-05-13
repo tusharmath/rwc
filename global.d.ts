@@ -29,5 +29,5 @@ interface CustomElement {
 }
 
 interface Command {
-  run (e: Emitter, ce: HTMLElement): void
+  run (e: Hoe, ce: HTMLElement): void
 }

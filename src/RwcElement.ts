@@ -1,11 +1,11 @@
 /**
  * Created by tushar on 22/01/17.
  */
-///<reference path="../global.d.ts"/>
-import {hoe, Action} from 'hoe'
+
+import * as hoe from 'hoe'
 
 export abstract class RwcElement<T> extends HTMLElement implements CustomElement {
-  protected emitter = hoe(this.onAction.bind(this), {cache: true})
+  protected emitter = hoe.create(this.onAction.bind(this))
 
   set data (value: any) {
     this.emitter.of('@rwc/data').emit(value)
@@ -33,7 +33,7 @@ export abstract class RwcElement<T> extends HTMLElement implements CustomElement
 
   abstract update (a: Action<any>, s: T): T
 
-  abstract view <V> (e: Emitter, s: T): V
+  abstract view <V> (e: Hoe, s: T): V
 
   abstract command (a: Action<any>, s: T): Command
 }
