@@ -1,4 +1,6 @@
 # rwc (BETA)
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/tusharmath/rwc.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/tusharmath/rwc.svg?branch=master)](https://travis-ci.org/tusharmath/rwc)
 [![npm](https://img.shields.io/npm/v/rwc.svg)](https://www.npmjs.com/package/rwc)
 
