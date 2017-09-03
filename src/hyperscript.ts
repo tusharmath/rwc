@@ -3,14 +3,14 @@
  */
 
 type AttributeSet = {[key: string]: string | number}
-type Children = Array<VNode | string>
+type Children = Array<VElement | string>
 type CSS = Array<string>
 type EventSet = {[key: string]: EventListener}
 type PropSet = {[key: string]: any}
 type StyleSet = {[key: string]: string|number}
 type TYPE = string
 
-interface VNode {
+export interface VElement {
   attrs: AttributeSet
   children: Children
   css: CSS
@@ -44,10 +44,10 @@ export const args = (...t: any[]): [string, Options, Children] => {
   return args(t[0], defaultOPT(t[1]), [])
 }
 
-export function h(selector: string, options: Options, children: Children): VNode
-export function h(selector: string, children: Children): VNode
-export function h(selector: string, options: Options): VNode
-export function h(selector: string): VNode
+export function h(selector: string, options: Options, children: Children): VElement
+export function h(selector: string, children: Children): VElement
+export function h(selector: string, options: Options): VElement
+export function h(selector: string): VElement
 export function h(...t: any[]) {
   const [selector, {attrs, props, style, on}, children] = args(...t)
   const [type, ...css] = selector.split('.')

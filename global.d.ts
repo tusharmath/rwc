@@ -10,6 +10,8 @@ interface CustomElement {
   connectedCallback(): void
 
   /**
+   window: any;
+   window: any;
    * Called when the element is removed from a document
    */
 
@@ -35,3 +37,8 @@ interface CustomElement {
   ): void
 }
 
+declare module 'jsdom' {
+  export class JSDOM {
+    window: Window
+  }
+}
