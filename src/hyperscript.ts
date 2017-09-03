@@ -27,7 +27,7 @@ type Options = {
   style?: StyleSet
 }
 
-export const defaultOPT = (i?: Options) =>
+const defaultOPT = (i?: Options) =>
   Object.assign(
     {
       attrs: {},
