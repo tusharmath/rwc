@@ -6,11 +6,8 @@
     "url": "http://tusharm.com"
   },
   "scripts": {
-    "prepublish": "tsc -d",
-    "lint": "tslint ./src/*.ts ./src/**/*.ts",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "test": "tsc && mocha -r src/TestSetup.js",
-    "test:watch": "tsc && mocha -r src/TestSetup.js -w"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -52,15 +49,18 @@
     "shadow-dom"
   ],
   "devDependencies": {
+    "@types/mocha": "^2.2.42",
     "cz-conventional-changelog": "^2.0.0",
     "ghooks": "^2.0.0",
+    "jsdom": "^11.2.0",
     "mocha": "^3.2.0",
     "semantic-release": "^6.3.2",
-    "tslint": "^5.1.0",
-    "typescript": "^2.0.3",
+    "ts-node": "^3.3.0",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.2",
     "validate-commit-msg": "^2.8.0"
   },
   "dependencies": {
-    "hoe": "^6.0.0"
+    "ts-mocha": "^1.0.3"
   }
 }

@@ -2,7 +2,6 @@
  * Created by tushar on 22/01/17.
  */
 
-
 interface CustomElement {
   /**
    * Called when the element is inserted into a document, including into a shadow tree
@@ -20,14 +19,19 @@ interface CustomElement {
    * Called when an attribute is changed, appended, removed, or replaced on the element. Only called for observed attributes.
    */
 
-  attributeChangedCallback(attributeName: string, oldValue: string, newValue: string, namespace: string): void
+  attributeChangedCallback(
+    attributeName: string,
+    oldValue: string,
+    newValue: string,
+    namespace: string
+  ): void
 
   /**
    * Called when the element is adopted into a new document
    */
-  adoptedCallback(oldDocument: DocumentFragment, newDocument: DocumentFragment): void
+  adoptedCallback(
+    oldDocument: DocumentFragment,
+    newDocument: DocumentFragment
+  ): void
 }
 
-interface Command {
-  run (e: Hoe, ce: HTMLElement): void
-}
