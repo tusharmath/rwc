@@ -1,7 +1,7 @@
-import * as assert from 'assert'
 /**
  * Created by tushar on 03/09/17.
  */
+import * as assert from 'assert'
 import {JSDOM} from 'jsdom'
 import {h} from '../src/hyperscript'
 import {patch} from '../src/patch'
@@ -69,5 +69,30 @@ describe('patch', function() {
     const actual = this.element.style.display
     const expected = 'none'
     assert.equal(actual, expected)
+  })
+
+  it('should set text', function() {
+    this.patch(this.element, h('a', ['A']))
+    const actual = this.element.innerHTML
+    const expected = 'A'
+    assert.strictEqual(actual, expected)
+  })
+
+  it('should patch children', function() {
+    const element: HTMLElement = this.tmpl(
+      ['<ul>', '<li>A</li>', '<li>B</li>', '<li>C</li>', '</ul>'].join('')
+    )
+    this.patch(
+      element,
+      h('ul', [h('li', ['A']), h('li', ['BB']), h('li', ['C'])])
+    )
+    assert.equal(
+      element.innerHTML,
+      [
+        '<li class="">A</li>',
+        '<li class="">BB</li>',
+        '<li class="">C</li>'
+      ].join('')
+    )
   })
 })
