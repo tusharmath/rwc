@@ -3,7 +3,7 @@
  */
 
 import * as assert from 'assert'
-import {h, args} from '../src/hyperscript'
+import {h, args} from '../src/vdom/hyperscript'
 
 describe('hyperscript', () => {
   describe('h', () => {

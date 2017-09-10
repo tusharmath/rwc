@@ -3,8 +3,8 @@
  */
 import * as assert from 'assert'
 import {JSDOM} from 'jsdom'
-import {h} from '../src/hyperscript'
-import {patch} from '../src/patch'
+import {h} from '../src/vdom/hyperscript'
+import {patch} from '../src/vdom/patch'
 
 describe('patch', function() {
   beforeEach(function() {
