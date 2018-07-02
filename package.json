@@ -61,6 +61,6 @@
     "validate-commit-msg": "^2.8.0"
   },
   "dependencies": {
-    "hoe": "^6.0.0"
+    "hoe": "^8.0.0"
   }
 }
