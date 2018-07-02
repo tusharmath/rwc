@@ -55,7 +55,7 @@
     "cz-conventional-changelog": "^2.0.0",
     "ghooks": "^2.0.0",
     "mocha": "^4.0.0",
-    "semantic-release": "^6.3.2",
+    "semantic-release": "^15.6.2",
     "tslint": "^5.1.0",
     "typescript": "^2.0.3",
     "validate-commit-msg": "^2.8.0"
