@@ -52,7 +52,7 @@
     "shadow-dom"
   ],
   "devDependencies": {
-    "cz-conventional-changelog": "^2.0.0",
+    "cz-conventional-changelog": "^3.0.0",
     "ghooks": "^2.0.0",
     "mocha": "^4.0.0",
     "semantic-release": "^6.3.2",
